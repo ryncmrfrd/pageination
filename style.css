@@ -1,0 +1,39 @@
+/*temp nav btns*/
+nav{
+    position: absolute;
+    top: 20%;
+    left: 20%;
+}
+
+html, body{
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transition: transform 1.5s ease-in-out;
+}
+body.active-Page1{
+    transform: translateY(0vh);
+}
+body.active-Page2{
+    transform: translateY(-100vh)
+}
+body.active-Page3{
+    transform: translateY(-200vh)
+}
+
+section{
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+section.Page1{
+    background: red;
+}
+section.Page2{
+    background: green;
+}
+section.Page3{
+    background: blue;
+}
