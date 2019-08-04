@@ -20,32 +20,30 @@ var pagination = {
 
         // go to first page
         var hash = window.location.hash.replace("#","");
-        this.activePage = this.pageNames[this.pageNames.indexOf(hash)];
-        document.body.style.transform = `translateY(-${this.pageNames.indexOf(hash)}00vh)`;
+        if(hash) this.changePage(this.pageNames[this.pageNames.indexOf(hash)], "initialHash")
 
         // --------- listen for location hash change ---------
         window.addEventListener("hashchange", e => {
             var changeToPage = location.hash.replace("#","");
-
             if(this.pageNames.includes(changeToPage)){
-                this.changePage(changeToPage, "hashchange")
+                this.changePage(changeToPage, "norel");
             }
         });
 
         // --------- listen for scrolling ---------
         window.addEventListener("wheel", e => {
 
-            if(this.scrollDisabled || this.pageNames.indexOf(this.activePage) < 0){
-                console.log("yeet", this.scrollDisabled, this.pageNames.indexOf(this.activePage) < 0);
-            } else if(!this.scrollDisabled && this.pageNames.indexOf(this.activePage) > 0){
-
-                console.log("yooo",this.scrollDisabled, this.pageNames.indexOf(this.activePage))
+            if(this.scrollDisabled || this.pageNames.indexOf(this.activePage) < -1  ){
+                return false;
+            } else if(!this.scrollDisabled && this.pageNames.indexOf(this.activePage) > -1){
 
                 var scrolldirection = e.deltaY >= 0 ? "up" : "down";
                 if(scrolldirection == "up"){
-                    this.changePage(this.pageNames[this.pageNames.indexOf(this.activePage) + 1], "scroll")
+                    var nextpage = this.pageNames[this.pageNames.indexOf(this.activePage) + 1];
+                    if(nextpage != undefined) this.changePage(nextpage, "scroll")
                 } else{
-                    this.changePage(this.pageNames[this.pageNames.indexOf(this.activePage) - 1], "scroll")
+                    var nextpage = this.pageNames[this.pageNames.indexOf(this.activePage) - 1];
+                    if(nextpage != undefined) this.changePage(nextpage, "scroll")
                 }
     
                 this.scrollDisabled = true;
@@ -66,8 +64,8 @@ var pagination = {
 
         //for dev mode logs
         if(this.isDevMode){
-            if(relHandler) console.log(`Pagination | Changed page to ${ changeToPage} via "${relHandler}" handler`)
-            else console.log(`Pagination | Changed page to ${ changeToPage} via an unknown handler`)
+            if(relHandler && relHandler != "norel") console.log(`Pagination | Changed page to ${ changeToPage} via "${relHandler}" handler`)
+            else if(relHandler != "norel")console.log(`Pagination | Changed page to ${ changeToPage} via an unknown handler`)
         }
     },
 }
