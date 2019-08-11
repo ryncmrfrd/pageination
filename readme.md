@@ -3,7 +3,7 @@ Well, you've found yourself on the github repository for Pagination.js. What nex
 First, **what is Pagination.js?**
 Pagnation.js is a fast, easy and simple way to create beautiful single-age websites. Being just 4.93kb in size when minifified, and availible for FREE, Pagination.js loads quickly, doesn't hurt your bank account, and is not Fullscreen.js. Sorry not sorry.
 
-Below you'll find instructions on [getting started](), [downloading](), as well as comprehensive [documentation]() of Pagination.js. Have an explore, or skip right to the [demo page](https://ryncmrfrd.com/pagination)
+Below you'll find instructions on [getting started](#getting-started), [downloading](#download), as well as comprehensive [documentation](#full-documentation-for-nerds) of Pagination.js. Have an explore, or skip right to the [demo page](https://ryncmrfrd.com/pagination)
 
 # Getting Started
 
@@ -33,7 +33,7 @@ The exact details of each variable are explained in the Full Documentation secti
 
 # Download
 
-To download Pagintion.js simply save [pagination.min.js](https://raw.githubusercontent.com/ryncmrfrd/pagination/master/js/pagination.min.js). If you skipped here from the top, now is probably a good time to read the "Getting Started" section.
+To download Pagintion.js simply save [pagination.min.js](https://raw.githubusercontent.com/ryncmrfrd/pagination/master/dist/pagination.min.js). If you skipped here from the top, now is probably a good time to read the [Getting Started](#getting-started) section.
 
 # Full Documentation (for nerds)
 
