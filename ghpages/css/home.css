@@ -1,0 +1,31 @@
+::-webkit-scrollbar{
+    display: none
+}
+
+#down-arrow {
+    padding: 20px 20px 10px 20px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    color: #fff;
+    font-size: 3em;
+    animation: down-arrow 2s infinite
+}
+
+@keyframes down-arrow {
+    0%,
+    100%,
+    20%,
+    50%,
+    80% {
+        bottom: 0
+    }
+    40% {
+        bottom: 30px
+    }
+    60% {
+        bottom: 15px
+    }
+}
