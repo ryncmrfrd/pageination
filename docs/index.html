@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Pagination.JS</title>
+    <title>Pagination.js</title>
 
     <!-- css -->
     <link rel="stylesheet" href="css/prism.css"/>
@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
 </head>
 <body>
+    
     <main id="wrapper">
-        <section class="landing hero is-info is-fullheight">
+        <section class="landing hero is-info is-fullheight is-bold">
             <div class="hero-body">
                 <div class="container has-text-centered" style="padding-bottom: 100px;">
                     <h1 class="title is-1">Pagination.js</h1>
@@ -18,22 +19,20 @@
                     <code class="language-js" style="padding:8px;border-radius:4px">new pagination('wrapper')</code>
                 </div>
             </div>
-            <a href="#mobile" id="down-arrow"><i class="fas fa-chevron-down"></i></a>
+            <a id="down-arrow"><i class="fas fa-chevron-down"></i></a>
         </section>
-        <section class="mobile hero is-light is-fullheight">
+        <section class="touch hero is-dark is-fullheight">
             <div class="hero-body">
                 <div class="container has-text-centered" style="padding-bottom: 100px;">
                     <h1 class="title is-1">Flawless touch support.</h1>
-                    <p class="subtitle">Touch me here, touch me there - swipe me here, swipe me there.</p>
                     <h1 style="user-select: none;font-size: 15em; line-height: .95"><i class="far fa-hand-point-right"></i> <i class="fas fa-mobile-alt"></i></h1>
                 </div>
             </div>
         </section>
-        <section class="getstarted hero is-info is-fullheight">
+        <section class="getstarted hero is-info is-fullheight is-bold">
             <div class="hero-body">
                 <div class="container has-text-centered" style="padding-bottom: 100px;">
                     <h1 class="title is-1">Get started in 1 minute.</h1>
-                    <p class="subtitle">With just this code, you can instantly create a beautiful, 3-section page.</p>
                     <div class="columns" style="padding-top: 30px">
                         <div class="column is-half">
                             <p class="subtitle is-4">HTML</p>
@@ -47,19 +46,19 @@
                 </div>
             </div>
         </section>
-        <section class="download hero is-light is-fullheight">
+        <section class="download hero is-dark is-fullheight">
             <div class="hero-body">
                 <div class="container has-text-centered" style="padding-bottom: 100px;">
-                    <h1 class="title is-1">Why not start now?</h1>
-                    <a class="button is-info is-outlined" style="margin: 10px 10px 0 0" href="https://github.com/ryncmrfrd/pagination" target="_blank">
+                    <h1 class="title is-1">Take a peak.</h1>
+                    <a class="button is-light is-outlined" style="margin: 10px 10px 0 0" href="https://github.com/ryncmrfrd/pagination" target="_blank">
                         <span class="icon"><i class="fab fa-github"></i></span>
                         <span>Github</span>
                     </a>
-                    <a class="button is-large is-info" href="https://raw.githubusercontent.com/ryncmrfrd/pagination/master/dist/pagination.min.js">
+                    <a class="button is-large is-light" href="https://raw.githubusercontent.com/ryncmrfrd/pagination/master/dist/pagination.min.js">
                         <span class="icon"><i class="fas fa-file-download"></i></span>
                         <span>Download</span>
                     </a>
-                    <a class="button is-info is-outlined" style="margin: 10px 0 0 10px" href="https://ryncmrfrd.com" target="_blank">
+                    <a class="button is-light is-outlined" style="margin: 10px 0 0 10px" href="https://ryncmrfrd.com" target="_blank">
                         <span class="icon"><i class="fas fa-grin"></i></span>
                         <span>Say Hi!</span>
                     </a>
@@ -70,6 +69,12 @@
 
     <script src="js/prism.js"></script>
     <script src="js/pagination.min.js"></script>
-    <script>new pagination('wrapper')</script>
+    <script>
+        new pagination('wrapper', {
+            useHashes: false,
+            dots: { dotPosition: "right" }
+        });
+        document.querySelector("#down-arrow").addEventListener("click", e => _pagination.api.changePage("touch") );
+    </script>
 </body>
 </html>
