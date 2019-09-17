@@ -1,0 +1,15 @@
+{
+    "name": "pageination",
+    "version": "2.0.0",
+    "description": "Simple, free, single-page websites.",
+    "author": "Ryan Comerford",
+    "license": "MIT",
+    "homepage": "https://pageination.ryncmrfrd.com",
+    "repository": {
+        "type": "github",
+        "url": "https://github.com/ryncmrfrd/pageination/"
+    },
+    "bugs": {
+        "url": "https://github.com/ryncmrfrd/pageination/issues"
+    }
+}
