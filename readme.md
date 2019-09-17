@@ -34,7 +34,7 @@ If this is the only thing that your read, take this in: all you need to start is
 
 4) Enjoy your new, shiny single-page website. It should look like [this](https://pageination.ryncmrfrd.com).
 
-## :handshaking: Contributing
+## :handshake: Contributing
 
 Contributions, issues and feature requests are welcome!
 Feel free to check [issues page](https://github.com/ryncmrfrd/pageination/issues).
