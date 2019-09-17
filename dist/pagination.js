@@ -1,6 +1,6 @@
 /**
  
-    Pagination | Simple, free, single-page websites.
+    Pageination | Simple, free, single-page websites.
     @version 1.0.0
     @author Ryan Comerford <https://ryncmrfrd.com>
 
@@ -8,69 +8,72 @@
 
 "use strict";
 
-const pagination = function(paginationWrapperID, {
-    useHashes = true,
+const pageination = function (pageinationWrapperID, {
+
+    //misc config arguments
     scrollSpeed = 1000,
     isDevMode = false,
-    dots = {
-        dotPosition: "left"
-    }
-} = { 
-    "useHashes": true, 
-    "scrollSpeed": 1000, 
+    dots = { dotPosition: "left", dotTheme: "light" },
+
+    //inbuilt event listener functions
+    onInit = function () { },
+    onPageChange = function () { }
+
+} = {
+    "scrollSpeed": 1000,
     "isDevMode": false,
-    "dots": { "dotPosition": "left" }
+    "dots": { "dotPosition": "left", "dotTheme": "light" },
+    "onInit": function () { },
+    "onPageChange": function () { }
 }){
 
-    /* 
-        Arguments error handling
+    /*
+        Error handling for arguments
     */
 
-    //paginationWrapperID
-    if( !paginationWrapperID ) throw new Error('Pagination | REQUIRED VARIABLE - The ID of your Pagination wrapper must be provided.');
-    else if( typeof (paginationWrapperID) != 'string' ) throw new Error('Pagination | VARIABLE ERROR - The provided wrapper ID must be of type "string".');
-    else if( !document.getElementById(paginationWrapperID) ) throw new Error('Pagination | VARIABLE ERROR - An element with the provided ID was not found.');
+    if (!pageinationWrapperID) throw new Error("Pageination | REQUIRED VARIABLE | ID of pageination wrapper element must be provided.")
+    if (typeof pageinationWrapperID != "string") throw new Error("Pageination | VARIABLE TYPE | pageinationWrapperID must be of type 'string'.")
 
-    //useHashes
-    if( typeof (useHashes) != 'boolean' ) throw new Error('Pagination | VARIABLE ERROR - useHashes must be of type "boolean".');
+    if (typeof scrollSpeed != "number") throw new Error("Pageination | VARIABLE TYPE | scrollSpeed must be of type 'number'.")
+    if (scrollSpeed > 10000) console.warning("Pageination | Painfully slow scroll speed detected.")
+    if (scrollSpeed < 0) throw new Error("Pageination | VARIABLE ERROR | scrollSpeed must be greater than 0.")
 
-    //scrollSpeed
-    if( typeof (scrollSpeed) != 'number') throw new Error('Pagination | VARIABLE ERROR - scrollSpeed must be of type "number".')
-    else if( scrollSpeed < 0 ) throw new Error('Pagination | VARIABLE ERROR - scrollSpeed must have a value above 0.')
-    else if( scrollSpeed > 10000 ) console.warn('Pagination | Painfully slow scroll speed detected.')
+    if (isDevMode != false && typeof isDevMode != "boolean") throw new Error("Pageination | VARIABLE TYPE | isDevMode must be of type boolean.")
 
-    //isDevMode
-    if( typeof (isDevMode) != 'boolean' ) throw new Error('Pagination | VARIABLE ERROR - isDevMode must be of type "boolean".')
+    if (typeof dots != "object") throw new Error("Pageination | VARIABLE TYPE | dots must be of type 'object'.")
+    if (typeof dots.dotPosition != "string") throw new Error("Pageination | VARIABLE TYPE | dots.dotPosition must be of type 'string'.")
+    if (typeof dots.dotTheme != "string") throw new Error("Pageination | VARIABLE TYPE | dots.dotTheme must be of type 'string'.")
+    if (!/(?:top|left|bottom|right)/.test(dots.dotPosition)) throw new Error("Pageination | VARIABLE TYPE | dots.dotPosition must be either 'top', 'left', 'bottom', or 'right'.")
+    if (!/(?:dark|light)/.test(dots.dotTheme)) throw new Error("Pageination | VARIABLE TYPE | dots.dotTheme must be either 'dark' or 'light'.")
 
-    //dots
-    if( typeof (dots) != 'object' ) throw new Error('Pagination | VARIABLE ERROR - Dots variable must be of type object.');
-    else if( !dots.dotPosition ) throw new Error('Pagination | REQUIRED VARIABLE - dotPosition variable is required.');
-    else if( typeof (dots.dotPosition) != 'string' ) throw new Error('Pagination | VARIABLE ERROR - dotPosition variable must be of type string.');
+    if (typeof onInit != "function") throw new Error("Pageination | VARIABLE TYPE | onInit must be of type 'function'.")
+    if (typeof onPageChange != "function") throw new Error("Pageination | VARIABLE TYPE | onPageChange must be of type 'function'.")
 
     /*
         Get other variables for init fn
     */
-    var pageWrapper = document.querySelector(`#${paginationWrapperID}`),
+
+    var pageWrapper = document.querySelector(`#${pageinationWrapperID}`),
         pageObjects = pageWrapper.querySelectorAll("section"),
         pageNames = [];
-        pageObjects.forEach(e => pageNames.push(e.classList[0]))
+    pageObjects.forEach(e => pageNames.push(e.classList[0]))
 
     /*
         Log found variables if "isDevMode" is true (default = false)
     */
 
-    if( isDevMode ){
+    if (isDevMode) {
         console.log(
-            '%c Pagination | Dev Mode Enabled', 'color:red; font-size:35px; font-weight: bold; -webkit-text-stroke: 1px black;',
-            '\n\nPage Wrapper DOMObject: ', pageWrapper, //the DOM object of the element with the paginationWrapperID
+            '%c Pageination | Dev Mode Enabled', 'color:red; font-size:35px; font-weight: bold; -webkit-text-stroke: 1px black;',
+            '\n\nPage Wrapper DOMObject: ', pageWrapper,
             '\nPage Names', {
-                'Strings': pageNames, //the raw text names of the pages
-                'DOMObjects': pageObjects //the DOM objects of the pages
-            },
+            'Strings': pageNames,
+            'DOMObjects': pageObjects
+        },
             '\nSettings', {
-                'scrollSpeed': scrollSpeed, //the speed at which which to change pages
-                'isDevMode': isDevMode //whether to console log page changes
-            }
+            'scrollSpeed': scrollSpeed,
+            'isDevMode': isDevMode
+        }
         )
     }
 
@@ -78,23 +81,24 @@ const pagination = function(paginationWrapperID, {
         Run the internal init function. Keeps this fn short and sweet.
     */
 
-    return _pagination.api.init({
-        useHashes: useHashes,
+    return _pageination.api.init({
         scrollSpeed: scrollSpeed,
         isDevMode: isDevMode,
         pageWrapper: pageWrapper,
         pageObjects: pageObjects,
         pageNames: pageNames,
-        dots: dots
+        dots: dots,
+        onPageChange: onPageChange,
+        onInit: onInit
     });
 
 }
 
-const _pagination = {
+const _pageination = {
 
     /* 
         Stores all global variables
-        Generally defined by _pagination.api.init()
+        Generally defined by _pageination.api.init()
     */
 
     vars: {
@@ -107,13 +111,16 @@ const _pagination = {
 
         //set by init function
         pageNames: [],
-        useHashes: true,
         scrollSpeed: 1000,
         isDevMode: false,
         dots: {
-            showDots: false,
-            dotPosition: "left"
-        }
+            dotPosition: "left",
+            dotTheme: "light"
+        },
+
+        //event listener functions
+        onInit: function () { },
+        onPageChange: function () { }
 
     },
 
@@ -127,90 +134,121 @@ const _pagination = {
             Sets the main variables and html styles
         */
 
-        init: function(
-            /** for argument descriptions @see 58 in pagination() fn */
-            { 
-                useHashes, 
-                scrollSpeed, 
-                isDevMode, 
-                pageWrapper, 
-                pageObjects, 
-                pageNames, 
-                dots 
-            }
-        ){
+        init: function ({
+            scrollSpeed,
+            isDevMode,
+            pageWrapper,
+            pageObjects,
+            pageNames,
+            dots,
+            onPageChange,
+            onInit
+        }) {
 
             /*
                 set global variables
             */
-            
-            _pagination.vars.pageWrapper = pageWrapper;
-            _pagination.vars.pageNames = pageNames;
-            _pagination.vars.useHashes = useHashes;
-            _pagination.vars.scrollSpeed = scrollSpeed;
-            _pagination.vars.isDevMode = isDevMode;
-            _pagination.vars.dots = dots;
+
+            _pageination.vars.pageWrapper = pageWrapper;
+            _pageination.vars.pageNames = pageNames;
+            _pageination.vars.scrollSpeed = scrollSpeed;
+            _pageination.vars.isDevMode = isDevMode;
+            _pageination.vars.dots = dots;
+            _pageination.vars.onPageChange = onPageChange;
+            _pageination.vars.onInit = onInit;
 
             /*
-                set css and classes for pagination-related elements
+                set css and classes for pageination-related elements
             */
-           
-            //ensures that styles are only used to pagination to avoid messing with other page styles
-            const generateHex = function(){ return Math.floor(Math.random()*16777215).toString(16); };
+
+            //ensures that styles are only used to pageination to avoid messing with other page styles
+            const generateHex = function () { return Math.floor(Math.random() * 16777215).toString(16); };
             var randomHex = generateHex();
-            _pagination.vars.random = randomHex;
+            _pageination.vars.random = randomHex;
 
-            //append pagination styles to document
-            var paginationStyle = document.createElement("style");
-            paginationStyle.innerText = `
-               ._${randomHex}_pagination-documentBody{overflow:hidden;margin:0;padding:0}
-               ._${randomHex}_pagination-pageWrapper{width:100vw;height:100vh;transition:transform ${_pagination.vars.scrollSpeed}ms ease}
-               ._${randomHex}_pagination-page{width:100vw;height:100vh}
-               ._${randomHex}_pagination-dotWrapper-top{height:15px;display:flex;flex-direction:row;align-items:center;justify-content:center;z-index:999;position:absolute;left:50%;top:20px;transform:translate(-50%,-50%)}
-               ._${randomHex}_pagination-dotWrapper-left{width:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;position:absolute;left:20px;top:50%;transform:translate(-50%,-50%)}
-               ._${randomHex}_pagination-dotWrapper-bottom{height:15px;display:flex;flex-direction:row;align-items:center;justify-content:center;z-index:999;position:absolute;left:50%;bottom:20px;transform:translate(-50%,-50%)}
-               ._${randomHex}_pagination-dotWrapper-right{width:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;position:absolute;right:20px;top:50%;transform:translate(-50%,-50%)}
-               ._${randomHex}_pagination-dot{cursor:pointer;opacity:.5;transition:opacity ${Number(_pagination.vars.scrollSpeed / 2)}ms,height ${Number(_pagination.vars.scrollSpeed / 2)}ms,width ${Number(_pagination.vars.scrollSpeed / 2)}ms,margin ${Number(_pagination.vars.scrollSpeed / 2)}ms;height:10px;width:10px;background-color:#fff;border-radius:50%}
-               ._${randomHex}_pagination-dotWrapper-top ._${randomHex}_pagination-dot{margin:0 7.5px}
-               ._${randomHex}_pagination-dotWrapper-left ._${randomHex}_pagination-dot{margin:7.5px 0}
-               ._${randomHex}_pagination-dotWrapper-bottom ._${randomHex}_pagination-dot{margin:0 7.5px}
-               ._${randomHex}_pagination-dotWrapper-right ._${randomHex}_pagination-dot{margin:7.5px 0}
-               ._${randomHex}_pagination-dot:hover{opacity:.75}
-               ._${randomHex}_pagination-dot._${randomHex}_pagination-dot-ACTIVE{margin:5px 0;height:15px;width:15px;cursor:initial;opacity:1}
-            `;      
-            document.body.append(paginationStyle);
+            //append pageination styles to document
+            var pageinationStyle = document.createElement("style");
+            pageinationStyle.innerText = `
+                ._${randomHex}_pageination-documentBody{overflow:hidden;margin:0;padding:0}
+                ._${randomHex}_pageination-pageWrapper{white-space:nowrap;transition:transform ${_pageination.vars.scrollSpeed}ms ease;margin:0;padding:0}
+                ._${randomHex}_pageination-page{overflow:hidden;margin:0;padding:0;}
+                ._${randomHex}_pageination-dotWrapper-top_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_dark ._${randomHex}_pageination-dot{background-color:#000}
+                ._${randomHex}_pageination-dotWrapper-top_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_light ._${randomHex}_pageination-dot{background-color:#fff}
+                ._${randomHex}_pageination-dotWrapper-top_dark,._${randomHex}_pageination-dotWrapper-top_light{height:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:50%;top:1%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+                ._${randomHex}_pageination-dotWrapper-left_dark,._${randomHex}_pageination-dotWrapper-left_light{width:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:1%;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+                ._${randomHex}_pageination-dotWrapper-bottom_dark,._${randomHex}_pageination-dotWrapper-bottom_light{height:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:50%;bottom:1%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+                ._${randomHex}_pageination-dotWrapper-right_dark,._${randomHex}_pageination-dotWrapper-right_light{width:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;right:1%;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+                ._${randomHex}_pageination-dot{cursor:pointer;opacity:.5;transition:opacity ${Number(_pageination.vars.scrollSpeed / 2)}ms,height ${Number(_pageination.vars.scrollSpeed / 2)}ms,width ${Number(_pageination.vars.scrollSpeed / 2)}ms,margin ${Number(_pageination.vars.scrollSpeed / 2)}ms;height:10px;width:10px;border-radius:50%}
+                ._${randomHex}_pageination-dotWrapper-top_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-top_light ._${randomHex}_pageination-dot{margin:0 7.5px}
+                ._${randomHex}_pageination-dotWrapper-left_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_light ._${randomHex}_pageination-dot{margin:7.5px 0}
+                ._${randomHex}_pageination-dotWrapper-bottom_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_light ._${randomHex}_pageination-dot{margin:0 7.5px}
+                ._${randomHex}_pageination-dotWrapper-right_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_light ._${randomHex}_pageination-dot{margin:7.5px 0}
+                ._${randomHex}_pageination-dot:hover{opacity:.75}
+                ._${randomHex}_pageination-dot._${randomHex}_pageination-dot-ACTIVE{margin:5px 0;height:15px;width:15px;cursor:initial;opacity:1}
+            `;
+            document.body.append(pageinationStyle);
 
-            //add classes to pagination elements
-            document.body.classList.add(`_${randomHex}_pagination-documentBody`)
-            pageWrapper.classList.add(`_${randomHex}_pagination-pageWrapper`);
-            pageObjects.forEach(element => element.classList.add(`_${randomHex}_pagination-page`) );
+            //add classes and size to pageination elements
+           
+            document.body.classList.add(`_${randomHex}_pageination-documentBody`)
+            //width
+            document.body.style["min-width"] = window.innerWidth;
+            document.body.style.width = window.innerWidth;
+            document.body.style["max-width"] = window.innerWidth;
+            //height
+            document.body.style["min-height"] = window.innerHeight;
+            document.body.style.height = window.innerHeight;
+            document.body.style["max-height"] = window.innerHeight;
+
+            pageWrapper.classList.add(`_${randomHex}_pageination-pageWrapper`);
+            //width
+            pageWrapper.style["min-width"] = window.innerWidth;
+            pageWrapper.style.width = window.innerWidth;
+            pageWrapper.style["max-width"] = window.innerWidth;
+            //height
+            pageWrapper.style["min-height"] = window.innerHeight;
+            pageWrapper.style.height = window.innerHeight;
+            pageWrapper.style["max-height"] = window.innerHeight;
+
+            pageObjects.forEach(element => {
+                element.classList.add(`_${randomHex}_pageination-page`)
+                //width
+                element.style["min-width"] = window.innerWidth;
+                element.style.width = window.innerWidth;
+                element.style["max-width"] = window.innerWidth;
+                //height
+                element.style["min-height"] = window.innerHeight;
+                element.style.height = window.innerHeight;
+                element.style["max-height"] = window.innerHeight;
+            });
 
             /*
                 Creates dots of screen to show the active page
             */
 
-            if( dots ){
+            if (dots) {
 
                 //create new DOM element and add it to the beginning of the body
                 var newDots = document.createElement("div");
-                    newDots.classList.add(`_${randomHex}_pagination-dotWrapper-${dots.dotPosition}`);
-                    document.body.prepend(newDots);
+                newDots.classList.add(`_${randomHex}_pageination-dotWrapper-${dots.dotPosition}_${dots.dotTheme || "light"}`);
+                document.body.prepend(newDots);
 
                 /**get that newly created element @see above */
-                var dotWrapper = document.querySelector(`._${randomHex}_pagination-dotWrapper-top`) ||
-                                 document.querySelector(`._${randomHex}_pagination-dotWrapper-right`) ||
-                                 document.querySelector(`._${randomHex}_pagination-dotWrapper-bottom`) ||
-                                 document.querySelector(`._${randomHex}_pagination-dotWrapper-left`);
+                var dotWrapper = document.querySelector(`._${randomHex}_pageination-dotWrapper-top_${dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${randomHex}_pageination-dotWrapper-right_${dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${randomHex}_pageination-dotWrapper-bottom_${dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${randomHex}_pageination-dotWrapper-left_${dots.dotTheme || "light"}`);
 
                 pageObjects.forEach(element => {
                     //create a new dot for each page element
                     var newDot = document.createElement("span");
-                    newDot.classList.add(`_${randomHex}_pagination-dot`);
+                    newDot.classList.add(`_${randomHex}_pageination-dot`);
                     newDot.id = element.classList[0];
                     //change page on clicking on dot
                     newDot.addEventListener("click", e => {
-                        if(!_pagination.vars.scrollLocked) this.changePage(e.target.id, "clickdots");
+                        if (!_pageination.vars.scrollLocked) this.changePage(e.target.id, "clickdots");
                     })
+
                     //add the new dot to the DOM
                     dotWrapper.append(newDot);
                 })
@@ -218,27 +256,30 @@ const _pagination = {
             }
 
             /*
-                Go to the correct page
+                Run init event listener function
             */
 
-            //if hash anchors are disabled go to the first page
-            if(!_pagination.vars.useHashes){
-                this.changePage(_pagination.vars.pageNames[0], "first page", true)
-            } else{
-                // if a hash is present go to that page
-                var urlHash =  _pagination.vars.pageNames.indexOf(window.location.hash.replace("#", ""));
-                if(urlHash > -1 && urlHash != 0) this.changePage(_pagination.vars.pageNames[urlHash], "initial hash");
-                
-                // otherwise go to the first page
-                else this.changePage(_pagination.vars.pageNames[0], "first page", true)
-            }
+            if (_pageination.vars.onInit) _pageination.vars.onInit(
+                pageWrapper,
+                pageNames,
+                scrollSpeed,
+                isDevMode,
+                dots,
+                onPageChange
+            )
+
+            /*
+                Go to the first page
+            */
+
+            this.changePage(_pageination.vars.pageNames[0], "first page", true)
 
             /*
                 Add touch scrolling event listeners
             */
-            
+
             var initialPosition = null;
-            
+
             /** on the beginning of the touch, set the initial position @see above */
             window.addEventListener("touchstart", e => initialPosition = e.touches[0].clientY);
 
@@ -246,26 +287,26 @@ const _pagination = {
             window.addEventListener("touchmove", e => {
 
                 //if no movement is detected
-                if (initialPosition === null || _pagination.vars.scrollLocked) return;
+                if (initialPosition === null || _pageination.vars.scrollLocked) return;
 
                 //calculate the position difference from old to new to find direction
                 var newPosition = e.touches[0].clientY,
                     positionDifference = initialPosition - newPosition;
 
                 //change to the page either 1 position up or down from the current pos
-                if( positionDifference > 0 ) {
-                    var nextpage = _pagination.vars.pageNames[_pagination.vars.pageNames.indexOf(_pagination.vars.activePage) + 1];
+                if (positionDifference > 0) {
+                    var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) + 1];
                     if (nextpage != undefined) this.changePage(nextpage, "touch")
                     else return;
-                } else{
-                    var nextpage = _pagination.vars.pageNames[_pagination.vars.pageNames.indexOf(_pagination.vars.activePage) - 1];
+                } else {
+                    var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) - 1];
                     if (nextpage != undefined) this.changePage(nextpage, "touch")
                     else return;
                 }
 
                 //reset for next time the handler runs
                 initialPosition = null;
-                
+
             });
 
             /*
@@ -274,25 +315,25 @@ const _pagination = {
 
             window.addEventListener("wheel", e => {
 
-                /*if currently scrolling (_pagination.vars.scrollLocked)
-                  or if the active page is not in the pageNames array (_pagination.vars.pageNames.indexOf(_pagination.vars.activePage))*/
-                if (_pagination.vars.scrollLocked || _pagination.vars.pageNames.indexOf(_pagination.vars.activePage) < 0) {
+                /*if currently scrolling (_pageination.vars.scrollLocked)
+                  or if the active page is not in the pageNames array (_pageination.vars.pageNames.indexOf(_pageination.vars.activePage))*/
+                if (_pageination.vars.scrollLocked || _pageination.vars.pageNames.indexOf(_pageination.vars.activePage) < 0) {
                     return;
-                } 
-                
+                }
+
                 /** @see: "(10 < e.deltaY || e.deltaY < -10)" | where 10 is the minimum "scroll sensitivity" */
-                else if (!_pagination.vars.scrollLocked && (10 < e.deltaY || e.deltaY < -10)) {
+                else if (!_pageination.vars.scrollLocked && (10 < e.deltaY || e.deltaY < -10)) {
                     var scrolldirection = e.deltaY >= 0 ? "up" : "down";
-                
+
                     //scroll to the above page
                     if (scrolldirection == "up") {
-                        var nextpage = _pagination.vars.pageNames[_pagination.vars.pageNames.indexOf(_pagination.vars.activePage) + 1];
+                        var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) + 1];
                         if (nextpage) this.changePage(nextpage, "scroll")
-                    } 
-                
+                    }
+
                     //scroll to the below page
                     else {
-                        var nextpage = _pagination.vars.pageNames[_pagination.vars.pageNames.indexOf(_pagination.vars.activePage) - 1];
+                        var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) - 1];
                         if (nextpage) this.changePage(nextpage, "scroll")
                     }
                 }
@@ -300,23 +341,55 @@ const _pagination = {
             });
 
             /*
-                Add listener for hash change (unless otherwise specified)
+                Add listener for page resize
             */
 
-            if (_pagination.vars.useHashes) {
-                window.addEventListener("hashchange", e => {
-                
-                    //if not currently scrolling
-                    if (!_pagination.vars.scrollLocked) {
-                        var toPage = window.location.hash.replace('#', '');
-                    
-                        //scroll to the page wqith the new hash
-                        if (toPage != _pagination.vars.activePage) this.changePage(toPage, "hashchange")
-                    }
-                    else return;
-                });
-            }
+            //allow for better performance while resizimg
+            var allowResize = true;
 
+            window.addEventListener("resize", e => {
+
+                //a very processing power intensive - pretty much rerenders the whole page
+                const resize = function(){
+
+                    document.body.style["min-width"] = window.innerWidth;
+                    document.body.style.width = window.innerWidth;
+                    document.body.style["max-width"] = window.innerWidth;
+                    document.body.style["min-height"] = window.innerHeight;
+                    document.body.style.height = window.innerHeight;
+                    document.body.style["max-height"] = window.innerHeight;
+    
+                    pageWrapper.style["min-width"] = window.innerWidth;
+                    pageWrapper.style.width = window.innerWidth;
+                    pageWrapper.style["max-width"] = window.innerWidth;
+                    pageWrapper.style["min-height"] = window.innerHeight;
+                    pageWrapper.style.height = window.innerHeight;
+                    pageWrapper.style["max-height"] = window.innerHeight;
+    
+                    pageObjects.forEach(element => {
+                        element.style["min-width"] = window.innerWidth;
+                        element.style.width = window.innerWidth;
+                        element.style["max-width"] = window.innerWidth;
+                        element.style["min-height"] = window.innerHeight;
+                        element.style.height = window.innerHeight;
+                        element.style["max-height"] = window.innerHeight;
+                    });
+
+                    _pageination.vars.pageWrapper.style.transform = `translateY(-${Number(window.innerHeight * _pageination.vars.pageNames.indexOf(_pageination.vars.activePage))}px)`
+
+                    allowResize = false;
+                }
+
+                if(allowResize) resize();
+                else {
+                    //only resize every 150ms to save on cpu power
+                    setTimeout(e => {
+                        resize();
+                        allowResize = true;
+                    }, 150)
+                }
+
+            });
 
         },
 
@@ -324,58 +397,57 @@ const _pagination = {
             Changes the shown page
         */
 
-        changePage: function(changeToPage, relHandler = "unknown", noDisableScroll = false){
-            
-            var page = _pagination.vars.pageNames[_pagination.vars.pageNames.indexOf(changeToPage)]
+        changePage: function (changeToPage, relHandler = "unknown", noDisableScroll = false) {
+
+            var page = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(changeToPage)]
 
             //changeToPage error handling
-            if (!changeToPage) throw new Error('Pagination | To change to a page, an argument stating which page is required.');
-            else if (typeof (changeToPage) != 'string') throw new Error('Pagination | The "changeToPage" variable must be of type "string"');
+            if (!changeToPage) throw new Error('Pageination | To change to a page, an argument stating which page is required.');
+            else if (typeof (changeToPage) != 'string') throw new Error('Pageination | The "changeToPage" variable must be of type "string"');
             else if (!page) {
-                if (_pagination.vars.isDevMode) console.warn('Pagination | The chosen page was not found in the "pageNames" variables, thus the page was not changed.');
-                if (window.location.hash.replace('#', '') != _pagination.vars.activePage) window.location.hash = _pagination.vars.activePage;
+                if (_pageination.vars.isDevMode) console.warn('Pageination | The chosen page was not found in the "pageNames" variables and the page was not changed.');
                 return false
             }
 
+            //run onchange function
+            if (_pageination.vars.onPageChange) _pageination.vars.onPageChange(page, relHandler)
+
             //animate the page change
-            _pagination.vars.pageWrapper.style.transform = `translateY(-${_pagination.vars.pageNames.indexOf(page)}00vh)`
+            _pageination.vars.pageWrapper.style.transform = `translateY(-${Number(window.innerHeight * _pageination.vars.pageNames.indexOf(page))}px)`
 
             //change the dev activePage variable to the new page
-            _pagination.vars.activePage = page;
+            _pageination.vars.activePage = page;
 
             //console.log if in dev mode
-            if (_pagination.vars.isDevMode) console.log('Pagination | Changed page to', page, 'via "' + relHandler + '"')
-
-            //set window hash to the changed to page
-            if (_pagination.vars.useHashes) window.location.hash = page;
+            if (_pageination.vars.isDevMode) console.log('Pageination | Changed page to', page, 'via "' + relHandler + '"')
 
             //disable all scroll handlers unless otherwise specified
-            if (!noDisableScroll) this.disableScroll(_pagination.vars.scrollSpeed);
+            if (!noDisableScroll) this.disableScroll(_pageination.vars.scrollSpeed);
 
             //if showdots variable
-            if(_pagination.vars.dots){
+            if (_pageination.vars.dots) {
 
                 //get all of the dots
-                var dotsWrapper = document.querySelector(`._${_pagination.vars.random}_pagination-dotWrapper-top`) ||
-                           document.querySelector(`._${_pagination.vars.random}_pagination-dotWrapper-left`) ||
-                           document.querySelector(`._${_pagination.vars.random}_pagination-dotWrapper-bottom`) ||
-                           document.querySelector(`._${_pagination.vars.random}_pagination-dotWrapper-right`);
- 
+                var dotsWrapper = document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-top_${_pageination.vars.dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-left_${_pageination.vars.dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-bottom_${_pageination.vars.dots.dotTheme || "light"}`) ||
+                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-right_${_pageination.vars.dots.dotTheme || "light"}`);
+
                 var dots = dotsWrapper.childNodes;
 
                 //remove active class from dot if it exists
                 var activeDot;
                 dots.forEach(elem => {
-                    if(elem.classList.value.toString().includes(`_${_pagination.vars.random}_pagination-dot-ACTIVE`)) activeDot = elem;
+                    if (elem.classList.value.toString().includes(`_${_pageination.vars.random}_pageination-dot-ACTIVE`)) activeDot = elem;
                 })
-                if(activeDot) activeDot.classList.remove(`_${_pagination.vars.random}_pagination-dot-ACTIVE`);
+                if (activeDot) activeDot.classList.remove(`_${_pageination.vars.random}_pageination-dot-ACTIVE`);
 
                 //add new active class to clicked dot
                 var clickedDot;
                 dots.forEach(elem => {
-                    if(elem.id == changeToPage) clickedDot = elem;
+                    if (elem.id == changeToPage) clickedDot = elem;
                 })
-                if(clickedDot) clickedDot.classList.add(`_${_pagination.vars.random}_pagination-dot-ACTIVE`);
+                if (clickedDot) clickedDot.classList.add(`_${_pageination.vars.random}_pageination-dot-ACTIVE`);
             }
 
             return true
@@ -386,15 +458,15 @@ const _pagination = {
             Disables all event handlers for x miliseconds
         */
 
-        disableScroll: function(miliseconds){
+        disableScroll: function (miliseconds) {
 
             //set scrollLocked variable
-            _pagination.vars.scrollLocked = true;
-            if( _pagination.vars.isDevMode) console.log('Pagination | Disabled scrolling for',miliseconds,'miliseconds');
-            
+            _pageination.vars.scrollLocked = true;
+            if (_pageination.vars.isDevMode) console.log('Pageination | Disabled scrolling for', miliseconds, 'miliseconds');
+
             //change back after "scrollSpeed" miliseconds
-            setTimeout(e =>{
-                _pagination.vars.scrollLocked = false
+            setTimeout(e => {
+                _pageination.vars.scrollLocked = false
             }, miliseconds);
 
         }

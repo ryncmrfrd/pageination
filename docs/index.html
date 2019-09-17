@@ -1,80 +1,93 @@
 <html>
 <head>
-    <title>Pagination.js</title>
+    <title>Pageination.js</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="css/prism.css"/>
-    <link rel="stylesheet" href="css/bulma.min.css"/>
-    <link rel="stylesheet" href="css/home.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/prism.css" />
+    <link async rel="stylesheet" href="css/home.css" />
+    <link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Pageination.js">
+    <meta name="description" content="Simple, free, single-page websites.">
+    <meta name="keywords" content="Pageination.js,pagination,single page web app,web app,progressive web app,pwa,singe page,website,tabbed website,web design,minimalist web design,js library,javascript,CSS,HTML,JS,ryncmrfrd">
+    <meta name="author" content="Pageination.js">
+    <meta name="theme-color" content="#0077cc">
+    <meta name="msapplication-TileColor" content="#0077cc">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pagination.ryncmrfrd.com/">
+    <meta property="og:title" content="Pageination.js">
+    <meta property="og:description" content="Simple, free, single-page websites.">
+    <meta property="og:image" content="https://pagination.ryncmrfrd.com/docs/screenshot.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pagination.ryncmrfrd.com/">
+    <meta property="twitter:title" content="Pageination.js">
+    <meta property="twitter:description" content="Simple, free, single-page websites.">
+    <meta property="twitter:image" content="https://pagination.ryncmrfrd.com/docs/screenshot.png">
+
 </head>
 <body>
-    
     <main id="wrapper">
-        <section class="landing hero is-info is-fullheight is-bold">
-            <div class="hero-body">
-                <div class="container has-text-centered" style="padding-bottom: 100px;">
-                    <h1 class="title is-1">Pagination.js</h1>
-                    <p class="subtitle">Simple, free, single-page websites.</p>
-                    <code class="language-js" style="padding:8px;border-radius:4px">new pagination('wrapper')</code>
-                </div>
+        <section class="Welcome">
+            <div class="centered">
+                <h1 class="title fit">Pageination.js</h1>
+                <p class="subtitle fit">Simple, free, single-page websites.</p>
+                <code class="language-js" style="margin-top:8px;padding:8px;">new pagination('wrapper')</code>
             </div>
-            <a id="down-arrow"><i class="fas fa-chevron-down"></i></a>
+            <a id="down-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
         </section>
-        <section class="touch hero is-dark is-fullheight">
-            <div class="hero-body">
-                <div class="container has-text-centered" style="padding-bottom: 100px;">
-                    <h1 class="title is-1">Flawless touch support.</h1>
-                    <h1 style="user-select: none;font-size: 15em; line-height: .95"><i class="far fa-hand-point-right"></i> <i class="fas fa-mobile-alt"></i></h1>
-                </div>
+        <section class="Mobile">
+            <div class="centered">
+                <h1 class="title fit">Mobile-friendly controls.</h1>
+                <h1 class="wrapper" style="font-size:13em;line-height:.95;margin:25px 0 0 0">
+                    <i id="arrow-hand" class="far"></i>
+                    <i class="fas fa-mobile-alt"></i>
+                </h1>
             </div>
         </section>
-        <section class="getstarted hero is-info is-fullheight is-bold">
-            <div class="hero-body">
-                <div class="container has-text-centered" style="padding-bottom: 100px;">
-                    <h1 class="title is-1">Get started in 1 minute.</h1>
-                    <div class="columns" style="padding-top: 30px">
-                        <div class="column is-half">
-                            <p class="subtitle is-4">HTML</p>
-                            <pre data-src="./js/recommendedhtml.html" style="border-radius:4px"><code class="language-html"></code></pre>
-                        </div>
-                        <div class="column">
-                            <p class="subtitle is-4">JS</p>
-                            <pre data-src="./js/recommendedjs.js" style="border-radius:4px"><code class="language-js"></code></pre>
-                        </div>
+        <section class="Quickstart">
+            <div class="centered">
+                <h1 class="title fit">Create this page with 12 lines.</h1>
+                <div class="wrapper">
+                    <div class="code" style="max-width:100%">
+                        <p>HTML</p>
+                        <pre data-src="./recommended/html.txt"
+                            style="border-radius:4px"><code class="language-html"></code></pre>
+                    </div>
+                    <div class="code" style="max-width:100%">
+                        <p>JS</p>
+                        <pre data-src="./recommended/js.txt"
+                            style="border-radius:4px"><code class="language-js"></code></pre>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="download hero is-dark is-fullheight">
-            <div class="hero-body">
-                <div class="container has-text-centered" style="padding-bottom: 100px;">
-                    <h1 class="title is-1">Take a peak.</h1>
-                    <a class="button is-light is-outlined" style="margin: 10px 10px 0 0" href="https://github.com/ryncmrfrd/pagination" target="_blank">
+        <section class="Download">
+            <div class="centered">
+                <h1 class="title fit">Take a peak.</h1>
+                <div class="wrapper">
+                    <a class="button" href="https://github.com/ryncmrfrd/pagination" target="_blank">
                         <span class="icon"><i class="fab fa-github"></i></span>
                         <span>Github</span>
                     </a>
-                    <a class="button is-large is-light" href="https://raw.githubusercontent.com/ryncmrfrd/pagination/master/dist/pagination.min.js">
+                    <a class="button"
+                        href="https://raw.githubusercontent.com/ryncmrfrd/pagination/master/dist/pagination.min.js">
                         <span class="icon"><i class="fas fa-file-download"></i></span>
                         <span>Download</span>
                     </a>
-                    <a class="button is-light is-outlined" style="margin: 10px 0 0 10px" href="https://ryncmrfrd.com" target="_blank">
+                    <a class="button" href="https://ryncmrfrd.com" target="_blank">
                         <span class="icon"><i class="fas fa-grin"></i></span>
-                        <span>Say Hi!</span>
+                        <span>Say Hi</span>
                     </a>
                 </div>
             </div>
         </section>
     </main>
-
-    <script src="js/prism.js"></script>
-    <script src="js/pagination.min.js"></script>
-    <script>
-        new pagination('wrapper', {
-            useHashes: false,
-            dots: { dotPosition: "right" }
-        });
-        document.querySelector("#down-arrow").addEventListener("click", e => _pagination.api.changePage("touch") );
-    </script>
+    <script src="./js/prism.js"></script>
+    <script src="./js/pagination.js"></script>
+    <script src="./js/fitty.js"></script>
+    <script src="./js/home.js"></script>
 </body>
 </html>
