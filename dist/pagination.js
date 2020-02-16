@@ -1,458 +1,250 @@
 /**
  
     Pageination | Simple, free, single-page websites.
-    @version 2.0.0
+    @version 3.0.0
     @author Ryan Comerford <https://ryncmrfrd.com>
 
 */
 
 "use strict";
 
-const pageination = function (pageinationWrapperID, {
+//pageination constructor - initializes the page and returns all paramaters
+function pageination(element = () => { throw new Error(`Pageination | ${txt}`) }, {
 
-    //misc config arguments
-    scrollSpeed = 1000,
-    isDevMode = false,
-    dots = { dotPosition: "left", dotTheme: "light" },
+    type = "vertical", //direction of scrolling
+    speed = 1000, //time (ms) it takes to scroll between pages
+    dots, //navigation dots object --> { type, theme }
+    autoScroll = false, //toggle automatically cycling through pages (disables all other listeners)
+    isBody = true, //toggles changes in overflow behaviour on body
+    onInit = () => {}, //event called on finishing initalizing page. returns pageination object (this)
+    onPageChange = () => {} //event called after every page change. returns the new page name and index
 
-    //inbuilt event listener functions
-    onInit = function () { },
-    onPageChange = function () { }
-
-} = {
-    "scrollSpeed": 1000,
-    "isDevMode": false,
-    "dots": { "dotPosition": "left", "dotTheme": "light" },
-    "onInit": function () { },
-    "onPageChange": function () { }
-}){
+} = {}){
 
     /*
-        Error handling for arguments
+        CONSTRUCTOR VALUES
+        -- for variable definitions see above --
+        -- Object.defineProperty used here to make variables writable: false --
+    */ 
+
+    let activePage = 0; //the index of the currently "active" page in this.pageNames
+
+        ( !/(?:vertical|horizontal)/.test(type) ) ? type = "vertical" : ""; //defaults type value to vertical
+    Object.defineProperty(this, 'type', {value: type, writable: false});
+    Object.defineProperty(this, 'speed', {value: +speed||1000, writable: false});
+        ( dots && !/(?:top|left|bottom|right)/.test(dots.type) ) ? dots.type = "right" : ""; //defaults dots type to right
+        ( dots && !/(?:light|dark)/.test(dots.theme) ) ? dots.theme = "light" : ""; //defaults dots theme to light
+    Object.defineProperty(this, 'dots', {value: dots||undefined, writable: false});
+    Object.defineProperty(this, 'autoScroll', {value: autoScroll, writable: false});
+    Object.defineProperty(this, 'isBody', {value: isBody||true, writable: false});
+    Object.defineProperty(this, 'element', {value: document.querySelector(element), writable: false});
+    Object.defineProperty(this, 'pages', {value: document.querySelectorAll(`${element} section`), writable: false});
+        var pageNames = []; this.pages.forEach((e, i) => pageNames.push(e.id || i)); //gets all page names from their ids
+    Object.defineProperty(this, 'pageNames', {value: pageNames, writable: false});
+    Object.defineProperty(this, 'onInit', {value: onInit, writable: false});
+    Object.defineProperty(this, 'onPageChange', {value: onPageChange, writable: false});
+
+
+    /* 
+        CSS
     */
 
-    if (!pageinationWrapperID) throw new Error("Pageination | REQUIRED VARIABLE | ID of pageination wrapper element must be provided.")
-    if (typeof pageinationWrapperID != "string") throw new Error("Pageination | VARIABLE TYPE | pageinationWrapperID must be of type 'string'.")
+    //add pageination style element to dom
+    var cssElement = document.createElement("style");
+    cssElement.innerText = `.pageinationbody{height:100vh;width:100vw;margin:0}.pageinationbodyvertical{margin:0;overflow-y:hidden}.pageinationbodyhorizontal{margin:0;overflow-x:hidden}.pageinationwrapper{height:100%;-webkit-transition:-webkit-transform ${this.pageNames.length}ms ease-in-out;transition:-webkit-transform ${Number(this.speed / 2)}ms ease-in-out;-o-transition:transform ${Number(this.speed / 2)}ms ease-in-out;transition:transform ${Number(this.speed / 2)}ms ease-in-out;transition:transform ${Number(this.speed / 2)}ms ease-in-out,-webkit-transform ${Number(this.speed / 2)}ms ease-in-out}.pageinationwrappervertical{-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0);width:100%}.pageinationwrapperhorizontal{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-flow:row nowrap;flex-flow:row nowrap;width:${this.pageNames.length}00%}.pageinationpage{height:100%!important;width:100%;overflow:hidden;-webkit-box-flex:2;-ms-flex-positive:2;flex-grow:2}.pageinationdots{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin:15px;z-index:999}.pageinationdotsleft, .pageinationdotsright{width:15px;position:fixed;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.pageinationdotsright{right:0}.pageinationdotsleft{left:0}.pageinationdotsleft .pageinationdot, .pageinationdotsright .pageinationdot{margin:7.5px 0}.pageinationdotsleft .pageinationdotactive, .pageinationdotsright .pageinationdotactive{margin:5px 0!important}.pageinationdotsbottom, .pageinationdotstop{height:15px;position:fixed;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.pageinationdotstop{top:50%}.pageinationdotsbottom{bottom:0}.pageinationdotsbottom .pageinationdot, .pageinationdotstop .pageinationdot{margin:0 7.5px}.pageinationdotsbottom .pageinationdotactive, .pageinationdotstop .pageinationdotactive{margin:0 5px!important}.pageinationdotactive{opacity:1!important;cursor:default!important;height:15px!important;width:15px!important}.pageinationdot{${!this.autoScroll ? "cursor:pointer" : ""};height:10px;width:10px;opacity:.5;border-radius:7.5px;-webkit-transition:opacity ${Number(this.speed / 2)}ms,height ${Number(this.speed / 2)}ms,width ${Number(this.speed / 2)}ms,margin ${Number(this.speed / 2)}ms;-o-transition:opacity ${Number(this.speed / 2)}ms,height ${Number(this.speed / 2)}ms,width ${Number(this.speed / 2)}ms,margin ${Number(this.speed / 2)}ms;transition:opacity ${Number(this.speed / 2)}ms,height ${Number(this.speed / 2)}ms,width ${Number(this.speed / 2)}ms,margin ${Number(this.speed / 2)}ms}${!this.autoScroll ? ".pageinationdot:hover{opacity:.75}" : ""}.pageinationdotslight .pageinationdot{background:#fff}.pageinationdotsdark .pageinationdot{background:#000}`;
+    document.body.append(cssElement);
 
-    if (typeof scrollSpeed != "number") throw new Error("Pageination | VARIABLE TYPE | scrollSpeed must be of type 'number'.")
-    if (scrollSpeed > 10000) console.warning("Pageination | Painfully slow scroll speed detected.")
-    if (scrollSpeed < 0) throw new Error("Pageination | VARIABLE ERROR | scrollSpeed must be greater than 0.")
+    //add class/es to body
+    document.body.classList.add(`pageinationbody${this.type}`);
+    if(this.isBody) document.body.classList.add(`pageinationbody`);
 
-    if (isDevMode != false && typeof isDevMode != "boolean") throw new Error("Pageination | VARIABLE TYPE | isDevMode must be of type boolean.")
+    //add classes to wrapper element
+    this.element.classList.add(`pageinationwrapper`)
+    this.element.classList.add(`pageinationwrapper${this.type}`)
 
-    if (typeof dots != "object") throw new Error("Pageination | VARIABLE TYPE | dots must be of type 'object'.")
-    if (typeof dots.dotPosition != "string") throw new Error("Pageination | VARIABLE TYPE | dots.dotPosition must be of type 'string'.")
-    if (typeof dots.dotTheme != "string") throw new Error("Pageination | VARIABLE TYPE | dots.dotTheme must be of type 'string'.")
-    if (!/(?:top|left|bottom|right)/.test(dots.dotPosition)) throw new Error("Pageination | VARIABLE TYPE | dots.dotPosition must be either 'top', 'left', 'bottom', or 'right'.")
-    if (!/(?:dark|light)/.test(dots.dotTheme)) throw new Error("Pageination | VARIABLE TYPE | dots.dotTheme must be either 'dark' or 'light'.")
+    // add classes to each page
+    this.pages.forEach(e => e.classList.add(`pageinationpage`) );
 
-    if (typeof onInit != "function") throw new Error("Pageination | VARIABLE TYPE | onInit must be of type 'function'.")
-    if (typeof onPageChange != "function") throw new Error("Pageination | VARIABLE TYPE | onPageChange must be of type 'function'.")
-
-    /*
-        Get other variables for init fn
+    /* 
+        CREATE DOTS
     */
 
-    var pageWrapper = document.querySelector(`#${pageinationWrapperID}`),
-        pageObjects = pageWrapper.querySelectorAll("section"),
-        pageNames = [];
-    pageObjects.forEach(e => pageNames.push(e.classList[0]))
+    if(this.dots){
 
-    /*
-        Log found variables if "isDevMode" is true (default = false)
-    */
+        //create new dots wrapper element
+        var newDots = document.createElement("div");
+            newDots.classList.add(`pageinationdots`);
 
-    if (isDevMode) {
-        console.log(
-            '%c Pageination | Dev Mode Enabled', 'color:red; font-size:35px; font-weight: bold; -webkit-text-stroke: 1px black;',
-            '\n\nPage Wrapper DOMObject: ', pageWrapper,
-            '\nPage Names', {
-            'Strings': pageNames,
-            'DOMObjects': pageObjects
-        },
-            '\nSettings', {
-            'scrollSpeed': scrollSpeed,
-            'isDevMode': isDevMode
-        }
-        )
+        // if not provided, make use of default dots positions
+        !this.dots.position ? 
+            ( this.type == "horizontal" ? newDots.classList.add(`pageinationdotsbottom`) : newDots.classList.add(`pageinationdotsright`) ) :
+            newDots.classList.add(`pageinationdots${this.dots.position}`);
+
+        //add theme class to new element
+        newDots.classList.add(`pageinationdots${this.dots.theme}`);
+        
+        //add element to dom
+        document.body.prepend(newDots);
+
+        var dotsWrapper = document.querySelector(`.pageinationdots`);
+
+        //create a new dot element for each page
+        this.pageNames.forEach(e => {
+            var dot = document.createElement("span");
+                dot.classList.add(`pageinationdot`);
+                dot.id = e;
+
+            //allow clicking on it to go to its respective page (unless autoscrolling)
+            if(!this.autoScroll){
+                dot.addEventListener("click", e => {
+                    this.changePage(e.target.id);
+                });
+            }
+
+            dotsWrapper.append(dot);
+        })
+
+        //add active class to initial dot
+        document.querySelector(`.pageinationdots`).childNodes[0].classList.add(`pageinationdotactive`);
     }
 
-    /*
-        Run the internal init function. Keeps this fn short and sweet.
+    if(!this.autoScroll){ // <-- autoScrolling disables all event handlers (touch AND scroll)
+
+        /* 
+            DETECTING SCROLLING
+        */
+ 
+        //listen for scrolling on wrapper elememt
+        this.element.addEventListener("wheel", e => {
+            var scrollDirection;
+
+            //calculate scroll directon from x,y deltas
+            Math.abs(event.deltaY) >= Math.abs(e.deltaX) ?
+                e.deltaY >= 0 ? scrollDirection = "down" : scrollDirection = "up" :
+                e.deltaX >= 0 ? scrollDirection = "right" : scrollDirection = "left";
+            
+            //call changepage based on scroll direction
+            this.type == "horizontal" ?
+                scrollDirection == "left" ? this.prevPage() : this.nextPage() :
+                scrollDirection == "up" ? this.prevPage() : this.nextPage();
+
+            //change overscroll behavior based on activepage number
+            if(this.type == "horizontal" && activePage == 0) {
+                setTimeout(() => {
+                    document.querySelector('html').style['overscroll-behavior-x'] = 'initial';
+                    document.querySelector('body').style['overscroll-behavior-x'] = 'initial';
+                }, this.speed); 
+            } else if(this.type == "horizontal") { 
+                document.querySelector('html').style['overscroll-behavior-x'] = 'none';
+                document.querySelector('body').style['overscroll-behavior-x'] = 'none';
+            }
+        });
+
+        /*
+            DETECTING TOUCH
+        */
+
+        var initialPositionX = null,
+            initialPositionY = null;
+
+        // get and store initial touch positions
+        this.element.addEventListener("touchstart", e => { initialPositionX = e.touches[0].clientX; initialPositionY = e.touches[0].clientY });
+
+        this.element.addEventListener("touchmove", e => {
+            if(initialPositionX == null || initialPositionY == null) return;
+
+            var deltaX = initialPositionX - e.touches[0].clientX, 
+                deltaY = initialPositionY - e.touches[0].clientY;
+
+            var touchDirection;
+            Math.abs(deltaY) >= Math.abs(deltaX) ?
+                deltaY >= 0 ? touchDirection = "down" : touchDirection = "up" :
+                deltaX >= 0 ? touchDirection = "right" : touchDirection = "left";
+
+            this.type == "horizontal" ?
+                touchDirection == "left" ? this.prevPage() : this.nextPage() :
+                touchDirection == "up" ? this.prevPage() : this.nextPage();
+
+            if(this.type == "horizontal" && activePage == 0) {
+                setTimeout(() => {
+                    document.querySelector('html').style['overscroll-behavior-x'] = 'initial';
+                    document.querySelector('body').style['overscroll-behavior-x'] = 'initial';
+                }, this.speed); 
+            } else if(this.type == "horizontal") { 
+                document.querySelector('html').style['overscroll-behavior-x'] = 'none';
+                document.querySelector('body').style['overscroll-behavior-x'] = 'none';
+            }
+        
+            initialPositionX = null;
+            initialPositionY = null;
+        });
+    } else{
+
+        function _autoScroll(_this) {
+            setTimeout(function () {
+                if(activePage == _this.pageNames.length - 1) _this.changePage(0);
+                else _this.nextPage();
+                _autoScroll(_this);
+            }, _this.speed * 2.5);
+        }
+        _autoScroll(this);
+    }
+       
+    /* 
+        DETECTING RESIZE
     */
 
-    return _pageination.api.init({
-        scrollSpeed: scrollSpeed,
-        isDevMode: isDevMode,
-        pageWrapper: pageWrapper,
-        pageObjects: pageObjects,
-        pageNames: pageNames,
-        dots: dots,
-        onPageChange: onPageChange,
-        onInit: onInit
+    // force page rerender on resize
+    window.addEventListener("resize", e => {
+        this.type == "horizontal" ? 
+            this.element.style.transform = `translateX(-${ activePage * window.innerWidth}px)` :
+            this.element.style.transform = `translateY(-${ activePage * window.innerHeight}px)`;
     });
 
-}
-
-const _pageination = {
-
     /* 
-        Stores all global variables
-        Generally defined by _pageination.api.init()
+        CHANGING PAGE
     */
 
-    vars: {
-
-        //misc developer variables
-        activePage: "",
-        scrollLocked: false,
-        pageWrapper: document.body,
-        random: "",
-
-        //set by init function
-        pageNames: [],
-        scrollSpeed: 1000,
-        isDevMode: false,
-        dots: {
-            dotPosition: "left",
-            dotTheme: "light"
-        },
-
-        //event listener functions
-        onInit: function () { },
-        onPageChange: function () { }
-
-    },
-
-    /* 
-        Reusable code ran by internal functions
-    */
-
-    api: {
-
-        /* 
-            Sets the main variables and html styles
-        */
-
-        init: function ({
-            scrollSpeed,
-            isDevMode,
-            pageWrapper,
-            pageObjects,
-            pageNames,
-            dots,
-            onPageChange,
-            onInit
-        }) {
-
-            /*
-                set global variables
-            */
-
-            _pageination.vars.pageWrapper = pageWrapper;
-            _pageination.vars.pageNames = pageNames;
-            _pageination.vars.scrollSpeed = scrollSpeed;
-            _pageination.vars.isDevMode = isDevMode;
-            _pageination.vars.dots = dots;
-            _pageination.vars.onPageChange = onPageChange;
-            _pageination.vars.onInit = onInit;
-
-            /*
-                set css and classes for pageination-related elements
-            */
-
-            //ensures that styles are only used to pageination to avoid messing with other page styles
-            const generateHex = function () { return Math.floor(Math.random() * 16777215).toString(16); };
-            var randomHex = generateHex();
-            _pageination.vars.random = randomHex;
-
-            //append pageination styles to document
-            var pageinationStyle = document.createElement("style");
-            pageinationStyle.innerText = `._${randomHex}_pageination-documentBody{overflow:hidden;margin:0;padding:0}._${randomHex}_pageination-pageWrapper{white-space:nowrap;transition:transform ${_pageination.vars.scrollSpeed}ms ease;margin:0;padding:0}._${randomHex}_pageination-page{overflow:hidden;margin:0;padding:0;}._${randomHex}_pageination-dotWrapper-top_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_dark ._${randomHex}_pageination-dot{background-color:#000}._${randomHex}_pageination-dotWrapper-top_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_light ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_light ._${randomHex}_pageination-dot{background-color:#fff}._${randomHex}_pageination-dotWrapper-top_dark,._${randomHex}_pageination-dotWrapper-top_light{height:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:50%;top:1%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}._${randomHex}_pageination-dotWrapper-left_dark,._${randomHex}_pageination-dotWrapper-left_light{width:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:1%;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}._${randomHex}_pageination-dotWrapper-bottom_dark,._${randomHex}_pageination-dotWrapper-bottom_light{height:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;left:50%;bottom:1%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}._${randomHex}_pageination-dotWrapper-right_dark,._${randomHex}_pageination-dotWrapper-right_light{width:15px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;z-index:999;position:absolute;right:1%;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}._${randomHex}_pageination-dot{cursor:pointer;opacity:.5;transition:opacity ${Number(_pageination.vars.scrollSpeed / 2)}ms,height ${Number(_pageination.vars.scrollSpeed / 2)}ms,width ${Number(_pageination.vars.scrollSpeed / 2)}ms,margin ${Number(_pageination.vars.scrollSpeed / 2)}ms;height:10px;width:10px;border-radius:50%}._${randomHex}_pageination-dotWrapper-top_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-top_light ._${randomHex}_pageination-dot{margin:0 7.5px}._${randomHex}_pageination-dotWrapper-left_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-left_light ._${randomHex}_pageination-dot{margin:7.5px 0}._${randomHex}_pageination-dotWrapper-bottom_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-bottom_light ._${randomHex}_pageination-dot{margin:0 7.5px}._${randomHex}_pageination-dotWrapper-right_dark ._${randomHex}_pageination-dot,._${randomHex}_pageination-dotWrapper-right_light ._${randomHex}_pageination-dot{margin:7.5px 0}._${randomHex}_pageination-dot:hover{opacity:.75}._${randomHex}_pageination-dot._${randomHex}_pageination-dot-ACTIVE{margin:5px 0;height:15px;width:15px;cursor:initial;opacity:1}`;
-            document.body.append(pageinationStyle);
-
-            //add classes and size to pageination elements
-           
-            document.body.classList.add(`_${randomHex}_pageination-documentBody`)
-            //width
-            document.body.style["min-width"] = window.innerWidth;
-            document.body.style.width = window.innerWidth;
-            document.body.style["max-width"] = window.innerWidth;
-            //height
-            document.body.style["min-height"] = window.innerHeight;
-            document.body.style.height = window.innerHeight;
-            document.body.style["max-height"] = window.innerHeight;
-
-            pageWrapper.classList.add(`_${randomHex}_pageination-pageWrapper`);
-            //width
-            pageWrapper.style["min-width"] = window.innerWidth;
-            pageWrapper.style.width = window.innerWidth;
-            pageWrapper.style["max-width"] = window.innerWidth;
-            //height
-            pageWrapper.style["min-height"] = window.innerHeight;
-            pageWrapper.style.height = window.innerHeight;
-            pageWrapper.style["max-height"] = window.innerHeight;
-
-            pageObjects.forEach(element => {
-                element.classList.add(`_${randomHex}_pageination-page`)
-                //width
-                element.style["min-width"] = window.innerWidth;
-                element.style.width = window.innerWidth;
-                element.style["max-width"] = window.innerWidth;
-                //height
-                element.style["min-height"] = window.innerHeight;
-                element.style.height = window.innerHeight;
-                element.style["max-height"] = window.innerHeight;
-            });
-
-            /*
-                Creates dots of screen to show the active page
-            */
-
-            if (dots) {
-
-                //create new DOM element and add it to the beginning of the body
-                var newDots = document.createElement("div");
-                newDots.classList.add(`_${randomHex}_pageination-dotWrapper-${dots.dotPosition}_${dots.dotTheme || "light"}`);
-                document.body.prepend(newDots);
-
-                /**get that newly created element @see above */
-                var dotWrapper = document.querySelector(`._${randomHex}_pageination-dotWrapper-top_${dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${randomHex}_pageination-dotWrapper-right_${dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${randomHex}_pageination-dotWrapper-bottom_${dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${randomHex}_pageination-dotWrapper-left_${dots.dotTheme || "light"}`);
-
-                pageObjects.forEach(element => {
-                    //create a new dot for each page element
-                    var newDot = document.createElement("span");
-                    newDot.classList.add(`_${randomHex}_pageination-dot`);
-                    newDot.id = element.classList[0];
-                    //change page on clicking on dot
-                    newDot.addEventListener("click", e => {
-                        if (!_pageination.vars.scrollLocked) this.changePage(e.target.id, "clickdots");
-                    })
-
-                    //add the new dot to the DOM
-                    dotWrapper.append(newDot);
-                })
-
-            }
-
-            /*
-                Run init event listener function
-            */
-
-            if (_pageination.vars.onInit) _pageination.vars.onInit(
-                pageWrapper,
-                pageNames,
-                scrollSpeed,
-                isDevMode,
-                dots,
-                onPageChange
-            )
-
-            /*
-                Go to the first page
-            */
-
-            this.changePage(_pageination.vars.pageNames[0], "first page", true)
-
-            /*
-                Add touch scrolling event listeners
-            */
-
-            var initialPosition = null;
-
-            /** on the beginning of the touch, set the initial position @see above */
-            window.addEventListener("touchstart", e => initialPosition = e.touches[0].clientY);
-
-            //while moving
-            window.addEventListener("touchmove", e => {
-
-                //if no movement is detected
-                if (initialPosition === null || _pageination.vars.scrollLocked) return;
-
-                //calculate the position difference from old to new to find direction
-                var newPosition = e.touches[0].clientY,
-                    positionDifference = initialPosition - newPosition;
-
-                //change to the page either 1 position up or down from the current pos
-                if (positionDifference > 0) {
-                    var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) + 1];
-                    if (nextpage != undefined) this.changePage(nextpage, "touch")
-                    else return;
-                } else {
-                    var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) - 1];
-                    if (nextpage != undefined) this.changePage(nextpage, "touch")
-                    else return;
-                }
-
-                //reset for next time the handler runs
-                initialPosition = null;
-
-            });
-
-            /*
-                Add listener for mousewheel scrolling
-            */
-
-            window.addEventListener("wheel", e => {
-
-                /*if currently scrolling (_pageination.vars.scrollLocked)
-                  or if the active page is not in the pageNames array (_pageination.vars.pageNames.indexOf(_pageination.vars.activePage))*/
-                if (_pageination.vars.scrollLocked || _pageination.vars.pageNames.indexOf(_pageination.vars.activePage) < 0) {
-                    return;
-                }
-
-                /** @see: "(10 < e.deltaY || e.deltaY < -10)" | where 10 is the minimum "scroll sensitivity" */
-                else if (!_pageination.vars.scrollLocked && (10 < e.deltaY || e.deltaY < -10)) {
-                    var scrolldirection = e.deltaY >= 0 ? "up" : "down";
-
-                    //scroll to the above page
-                    if (scrolldirection == "up") {
-                        var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) + 1];
-                        if (nextpage) this.changePage(nextpage, "scroll")
-                    }
-
-                    //scroll to the below page
-                    else {
-                        var nextpage = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(_pageination.vars.activePage) - 1];
-                        if (nextpage) this.changePage(nextpage, "scroll")
-                    }
-                }
-
-            });
-
-            /*
-                Add listener for page resize
-            */
-
-            //allow for better performance while resizimg
-            var allowResize = true;
-
-            window.addEventListener("resize", e => {
-
-                //a very processing power intensive - pretty much rerenders the whole page
-                const resize = function(){
-
-                    document.body.style["min-width"] = window.innerWidth;
-                    document.body.style.width = window.innerWidth;
-                    document.body.style["max-width"] = window.innerWidth;
-                    document.body.style["min-height"] = window.innerHeight;
-                    document.body.style.height = window.innerHeight;
-                    document.body.style["max-height"] = window.innerHeight;
-    
-                    pageWrapper.style["min-width"] = window.innerWidth;
-                    pageWrapper.style.width = window.innerWidth;
-                    pageWrapper.style["max-width"] = window.innerWidth;
-                    pageWrapper.style["min-height"] = window.innerHeight;
-                    pageWrapper.style.height = window.innerHeight;
-                    pageWrapper.style["max-height"] = window.innerHeight;
-    
-                    pageObjects.forEach(element => {
-                        element.style["min-width"] = window.innerWidth;
-                        element.style.width = window.innerWidth;
-                        element.style["max-width"] = window.innerWidth;
-                        element.style["min-height"] = window.innerHeight;
-                        element.style.height = window.innerHeight;
-                        element.style["max-height"] = window.innerHeight;
-                    });
-
-                    _pageination.vars.pageWrapper.style.transform = `translateY(-${Number(window.innerHeight * _pageination.vars.pageNames.indexOf(_pageination.vars.activePage))}px)`
-
-                    allowResize = false;
-                }
-
-                if(allowResize) resize();
-                else {
-                    //only resize every 150ms to save on cpu power
-                    setTimeout(e => {
-                        resize();
-                        allowResize = true;
-                    }, 150)
-                }
-
-            });
-
-        },
-
-        /* 
-            Changes the shown page
-        */
-
-        changePage: function (changeToPage, relHandler = "unknown", noDisableScroll = false) {
-
-            var page = _pageination.vars.pageNames[_pageination.vars.pageNames.indexOf(changeToPage)]
-
-            //changeToPage error handling
-            if (!changeToPage) throw new Error('Pageination | To change to a page, an argument stating which page is required.');
-            else if (typeof (changeToPage) != 'string') throw new Error('Pageination | The "changeToPage" variable must be of type "string"');
-            else if (!page) {
-                if (_pageination.vars.isDevMode) console.warn('Pageination | The chosen page was not found in the "pageNames" variables and the page was not changed.');
-                return false
-            }
-
-            //run onchange function
-            if (_pageination.vars.onPageChange) _pageination.vars.onPageChange(page, relHandler)
-
-            //animate the page change
-            _pageination.vars.pageWrapper.style.transform = `translateY(-${Number(window.innerHeight * _pageination.vars.pageNames.indexOf(page))}px)`
-
-            //change the dev activePage variable to the new page
-            _pageination.vars.activePage = page;
-
-            //console.log if in dev mode
-            if (_pageination.vars.isDevMode) console.log('Pageination | Changed page to', page, 'via "' + relHandler + '"')
-
-            //disable all scroll handlers unless otherwise specified
-            if (!noDisableScroll) this.disableScroll(_pageination.vars.scrollSpeed);
-
-            //if showdots variable
-            if (_pageination.vars.dots) {
-
-                //get all of the dots
-                var dotsWrapper = document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-top_${_pageination.vars.dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-left_${_pageination.vars.dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-bottom_${_pageination.vars.dots.dotTheme || "light"}`) ||
-                    document.querySelector(`._${_pageination.vars.random}_pageination-dotWrapper-right_${_pageination.vars.dots.dotTheme || "light"}`);
-
-                var dots = dotsWrapper.childNodes;
-
-                //remove active class from dot if it exists
-                var activeDot;
-                dots.forEach(elem => {
-                    if (elem.classList.value.toString().includes(`_${_pageination.vars.random}_pageination-dot-ACTIVE`)) activeDot = elem;
-                })
-                if (activeDot) activeDot.classList.remove(`_${_pageination.vars.random}_pageination-dot-ACTIVE`);
-
-                //add new active class to clicked dot
-                var clickedDot;
-                dots.forEach(elem => {
-                    if (elem.id == changeToPage) clickedDot = elem;
-                })
-                if (clickedDot) clickedDot.classList.add(`_${_pageination.vars.random}_pageination-dot-ACTIVE`);
-            }
-
-            return true
-
-        },
-
-        /* 
-            Disables all event handlers for x miliseconds
-        */
-
-        disableScroll: function (miliseconds) {
-
-            //set scrollLocked variable
-            _pageination.vars.scrollLocked = true;
-            if (_pageination.vars.isDevMode) console.log('Pageination | Disabled scrolling for', miliseconds, 'miliseconds');
-
-            //change back after "scrollSpeed" miliseconds
-            setTimeout(e => {
-                _pageination.vars.scrollLocked = false
-            }, miliseconds);
-
+    // define a function to change active pages
+    const changePage = (page) => {
+        if(!this.autoScroll && this.scrollDisabled) return false;
+
+        var pageIndex = typeof page == "number" ? page : this.pageNames.indexOf(page);
+
+        if(pageIndex < 0) pageIndex = 0;
+        if(pageIndex > this.pageNames.length - 1) pageIndex = this.pageNames.length - 1;
+
+        this.type == "horizontal" ? 
+            this.element.style.transform = `translateX(-${ pageIndex * window.innerWidth}px)` :
+            this.element.style.transform = `translateY(-${ pageIndex * window.innerHeight}px)`;
+
+        if(this.dots){
+            var dots = document.querySelector(`.pageinationdots`);
+            dots.querySelector('.pageinationdotactive').classList.remove('pageinationdotactive');
+            dots.childNodes[pageIndex].classList.add('pageinationdotactive');
         }
 
+        this.scrollDisabled = true;
+        setTimeout(() => this.scrollDisabled = false, (this.speed - (this.speed * .1)))
+
+        activePage = pageIndex;
+        return this.onPageChange(this.pageNames[pageIndex], pageIndex);
     }
+    Object.defineProperty(this, 'changePage', {value: changePage, writable: false});
+
+    // give quicker options for next/previous page calls
+    this.nextPage = () => this.changePage(activePage + 1);
+    this.prevPage = () => this.changePage(activePage - 1);
+
+    // scroll to top onload (only half working)
+    window.onbeforeunload = () => { 
+        this.changePage(0); 
+        window.scrollTo(0, 0);
+        this.type == "horizontal" ? 
+            this.element.style.transform = `translateX(-0px)` :
+            this.element.style.transform = `translateY(-0px)`;
+    };
+
+    this.changePage(0);
+    return this.onInit(this);
 }
