@@ -2,7 +2,7 @@
 ![Version](https://img.shields.io/badge/version-2.0.0-blue.svg?cacheSeconds=2592000)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green.svg)](https://github.com/ryncmrfrd/pageination//graphs/commit-activity)
 
-> With Pageination.js you can build simple, free, single-page websites in seconds. Check out the [demo page](https://pagination.ryncmrfrd.com) here or read on for full documentation.
+> With Pageination.js you can build simple, free, single-page websites in seconds. Check out the [demo page](https://pageination.ryncmrfrd.com) here or read on for full documentation.
 
 ## [:nerd_face: Full Documentation (for Nerds)](https://github.com/ryncmrfrd/pageination/blob/master/documentation.md)
 
