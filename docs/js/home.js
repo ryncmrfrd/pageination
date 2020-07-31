@@ -5,7 +5,7 @@
 */
 
 let _pageination = new pageination("#wrapper",{
-                        type: "horizontal",
+                        type: "vertical",
                         dots:{theme:"light"},
                         onPageChange:n=>{document.title=`${n} | Pagination.js`}
                     });
