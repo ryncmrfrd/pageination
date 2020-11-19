@@ -2,6 +2,12 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
+:root{
+    --blue: #07c;
+    --black: #000;
+    --white: #fff;
+}
+
 .title {
     font-size: 2.4em;
     margin-bottom: 0
@@ -14,14 +20,13 @@ body {
 
 .Download,
 .Welcome {
-    color: #fff;
-    background: #07c;
-    background: linear-gradient(115deg, #07c 0, #6dc2ff 100%)
+    color: var(--white);
+    background: var(--blue);
 }
 
 .Quickstart {
-    color: #07c;
-    background: #fff;
+    color: var(--blue);
+    background: var(--white);
 }
 
 .Download,
@@ -60,7 +65,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 5;
-    color: #fff;
+    color: var(--white);
     font-size: 3em
 }
 
@@ -86,18 +91,18 @@ body {
 
 .button {
     background: 0 0;
-    color: #fff;
+    color: var(--white);
     text-decoration: none;
     font-size: 1.1em;
     padding: 10px 15px;
     border-radius: 4px;
-    border: 1px solid #fff;
+    border: 1px solid var(--white);
     transition: color .25s, background .25s
 }
 
 .button:hover {
     color: #000;
-    background: #fff
+    background: var(--white);
 }
 
 .button:nth-of-type(2) {
@@ -105,11 +110,6 @@ body {
 }
 
 @media (max-width:550px) {
-    .Download,
-    .Quickstart,
-    .Welcome {
-        align-items: initial
-    }
     * .centered {
         margin-left: 10px
     }
@@ -124,7 +124,7 @@ code[class*=language-],
 pre[class*=language-] {
     color: #000;
     background: 0 0;
-    text-shadow: 0 1px #fff;
+    text-shadow: 0 1px var(--white);
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size: 1em;
     text-align: left;

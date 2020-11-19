@@ -52,6 +52,6 @@ onPageChange | Function which calls after a page change. | `function` |  Valid f
 
 ## :wave: Say Hi!
 
-[![GitHub followers](https://img.shields.io/github/followers/ryncmrfrd?label=Follow&style=social)](https://github.com/ryncmrfrd)
+[![GitHub Follow](https://img.shields.io/github/followers/ryncmrfrd?label=Follow&style=social)](https://github.com/ryncmrfrd)
 [![Twitter Follow](https://img.shields.io/twitter/follow/ryncmrfrd?label=Follow&style=social)](https://twitter.com/ryncmrfrd)
 Or :email: me at [ryncmrfrd@outlook.com](mailto:ryncmrfrd@outlook.com).
