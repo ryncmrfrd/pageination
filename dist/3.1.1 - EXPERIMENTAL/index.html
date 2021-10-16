@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Pageination.js</title>
+</head>
+<body>
+    <main id="wrapper">
+        <section id="Welcome" class="Welcome">
+            <div class="centered">
+                page 1
+            </div>
+        </section>
+        <section id="Quickstart" class="Quickstart">
+            <div class="centered">
+                page 2
+            </div>
+        </section>
+        <section id="Download" class="Download">
+            <div class="centered">
+                page 3
+            </div>
+        </section>
+	</main>
+	
+    <script type="module" src="./pageination-test.js"></script>
+    <script type="module">
+        import pageination from "./pageination-test.js"
+
+        // let _pageination = new pageination("#wrapper", {
+        //     type: "vertical",
+        //     onPageChange: function(e){ document.title = e + "| Pagination.js" }
+        // });
+    </script>
+</body>
+</html>

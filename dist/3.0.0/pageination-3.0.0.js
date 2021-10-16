@@ -119,14 +119,11 @@ function pageination(element = () => { throw new Error(`Pageination | ${txt}`) }
             var scrollDirection;
 
             //calculate scroll directon from x,y deltas
-            Math.abs(event.deltaY) >= Math.abs(e.deltaX) ?
-                e.deltaY >= 0 ? scrollDirection = "down" : scrollDirection = "up" :
-                e.deltaX >= 0 ? scrollDirection = "right" : scrollDirection = "left";
+            e.deltaY >= 0 ? scrollDirection = "down" : scrollDirection = "up";
             
             //call changepage based on scroll direction
-            this.type == "horizontal" ?
-                scrollDirection == "left" ? this.prevPage() : this.nextPage() :
-                scrollDirection == "up" ? this.prevPage() : this.nextPage();
+            if(scrollDirection == "left" || scrollDirection == "up") this.prevPage()
+            else this.nextPage()
 
             //change overscroll behavior based on activepage number
             if(this.type == "horizontal" && activePage == 0) {
