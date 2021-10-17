@@ -2,9 +2,6 @@
 <head>
     <title>Pageination.js</title>
 
-    <link async rel="stylesheet" href="css/home.css" />
-    <link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="Pageination.js">
@@ -25,58 +22,73 @@
     <meta property="twitter:image" content="https://pageination.ryncmrfrd.com/docs/screenshot.png">
 </head>
 <body>
-    <main id="wrapper">
-        <section id="Welcome" class="Welcome">
-            <div class="centered">
-                <h1 class="title fit">Pageination.js</h1>
-                <p class="subtitle fit">Simple, free, single-page websites.</p>
-                <code class="language-js" style="margin-top:8px;padding:8px;">new pageination('wrapper')</code>
-            </div>
-            <a id="down-arrow">
-                <i class="fas fa-chevron-down"></i>
-            </a>
+    <main id="elem" class="has-text-centered">
+
+        <section id="Welcome" class="columns is-mobile is-vcentered is-centered" style="background: #3e8ed0; margin: 0; padding: 12px">
+			<div class="column is-three-quarters-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+				<p class="title is-2 has-text-white">Pageination.js</p>
+				<p class="subtitle is-5 has-text-white">Simple, free, single-page websites.</p>
+				<p class="notification is-white is-family-monospace">
+					new pageination("#elem")
+				</p>
+			</div>
         </section>
-        <section id="Quickstart" class="Quickstart">
-            <div class="centered">
-                <h1 class="title fit">Create this page with 12 lines.</h1>
-                <div class="wrapper">
-                    <div class="code" style="max-width:100%">
-                        <p>HTML</p>
-                        <pre data-src="./recommended/html.html"
-                            style="border-radius:4px"><code class="language-html"></code></pre>
-                    </div>
-                    <div class="code" style="max-width:100%">
-                        <p>JS</p>
-                        <pre data-src="./recommended/js.js"
-                            style="border-radius:4px"><code class="language-js"></code></pre>
-                    </div>
-                </div>
-            </div>
+
+        <section id="Quickstart" class="columns is-mobile is-vcentered is-centered ">
+			<div class="column is-three-quarters-mobile is-half-tablet is-half-desktop is-one-third-widescreen">
+				<p class="title is-2">Create this page with 12 lines.</p>
+				<div class="columns is-mobile is-centered has-text-left">
+					<div class="column">
+						<p class="notification is-info is-family-monospace">
+							&lt;main id=&quot;elem&quot;&gt;<br>
+								<span style="margin-left: 20px">&lt;section class=&quot;Page1&quot;&gt;</span><br>
+									<span style="margin-left: 40px">Page1</span><br>
+								<span style="margin-left: 20px">&lt;/section&gt;</span><br>
+								<span style="margin-left: 20px">&lt;section class=&quot;Page2&quot;&gt;</span><br>
+									<span style="margin-left: 40px">Page2</span><br>
+								<span style="margin-left: 20px">&lt;/section&gt;</span><br>
+								<span style="margin-left: 20px">&lt;section class=&quot;Page3&quot;&gt;</span><br>
+									<span style="margin-left: 40px">Page3</span><br>
+								<span style="margin-left: 20px">&lt;/section&gt;</span><br>
+							&lt;/main&gt;
+						</p>
+					</div>
+					<div class="column">
+						<p class="notification is-info is-family-monospace">
+							new pageination("#elem")
+						</p>
+					</div>
+				</div>
+			</div>
         </section>
-        <section id="Download" class="Download">
-            <div class="centered">
-                <h1 class="title fit">Take a peak.</h1>
-                <div class="wrapper" style="align-items:center">
-                    <a class="button" href="https://github.com/ryncmrfrd/pageination" target="_blank">
-                        <span class="icon"><i class="fab fa-github"></i></span>
-                        <span>Github</span>
-                    </a>
-                    <a class="button"
-                        href="https://raw.githubusercontent.com/ryncmrfrd/pageination/master/dist/pageination.min.js">
-                        <span class="icon"><i class="fas fa-file-download"></i></span>
-                        <span>Download</span>
-                    </a>
-                    <a class="button" href="https://ryncmrfrd.com" target="_blank">
-                        <span class="icon"><i class="fas fa-grin"></i></span>
-                        <span>Say Hi</span>
-                    </a>
-                </div>
-            </div>
+
+        <section id="Download" class="columns is-mobile is-vcentered is-centered" style="background: #3e8ed0; margin: 0; padding: 12px">
+			<div class="column is-three-quarters-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
+				<p class="title is-2 has-text-white">Take a peak.</p>
+				<a class="button is-white is-outlined" style="margin-top: 5px" href="https://github.com/ryncmrfrd/pageination">
+					<span class="icon is-small"><i class="fab fa-github"></i></span><span>Github</span>
+				</a>
+				<a class="button is-white is-outlined is-medium" href="https://raw.githubusercontent.com/ryncmrfrd/pageination/master/dist/pageination.min.js">
+					<span class="icon is-small"><i class="fas fa-file-download"></i></span><span>Download</span>
+				</a>
+				<a class="button is-white is-outlined" href="https://ryncmrfrd.com" style="margin-top: 5px">
+					<span class="icon is-small"><i class="fas fa-hand-paper"></i></span><span>Say Hi</span>
+				</a>
+			</div>
         </section>
+
 	</main>
 	
-    <script src="../dist/3.1.0/pageination-3.1.0.js"></script>
-    <script src="./js/fitty.js"></script>
-    <script src="./js/home.js"></script>
+    <script src="./js/pageination-3.1.0.min.js"></script>
+	<script>
+		// The only code used to create the pages on this site
+		new pageination("#elem", {
+			dots: { type: "right", theme: "dark" },
+    		onPageChange: e => document.title = e + " | Pageination.js"
+		});
+	</script>
+
+	<link rel="stylesheet" href="./css/bulma.min.css" />
+	<link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
 </body>
 </html>
