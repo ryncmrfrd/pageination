@@ -2,7 +2,7 @@
 ![Version](https://img.shields.io/badge/version-3.1.0-blue.svg?cacheSeconds=2592000)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green.svg)](https://github.com/ryncmrfrd/pageination//graphs/commit-activity)
 
-> With Pageination.js you can build simple, free, single-page websites in seconds. Check out the [demo page](https://pageination.ryncmrfrd.com) here or read on for full documentation.
+> With Pageination.js you can build simple, free, single-page websites in seconds. Check out the [demo page](https://ryncmrfrd.com/pageination) here or read on for full documentation.
 
 ## [:nerd_face: Full Documentation (for Nerds)](https://github.com/ryncmrfrd/pageination/blob/master/documentation.md)
 
@@ -32,7 +32,7 @@ If this is the only thing that your read, take this in: all you need to start is
         new pageination("#wrapper")
     ```
 
-4) Enjoy your new, shiny single-page website. It should look like [this](https://pageination.ryncmrfrd.com).
+4) Enjoy your new, shiny single-page website. It should look like [this](https://ryncmrfrd.com/pageination).
 
 ## :handshake: Contributing
 
