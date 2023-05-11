@@ -39,5 +39,4 @@ Feel free to check [issues page](https://github.com/ryncmrfrd/pageination/issues
 ## :wave: Say Hi!
 
 [![GitHub followers](https://img.shields.io/github/followers/ryncmrfrd?label=Follow&style=social)](https://github.com/ryncmrfrd)
-[![Twitter Follow](https://img.shields.io/twitter/follow/ryncmrfrd?label=Follow&style=social)](https://twitter.com/ryncmrfrd)
 or :email: me at [ryncmrfrd@outlook.com](mailto:ryncmrfrd@outlook.com).
