@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"outDir": "build",
+		"target": "es6",
+		"removeComments": true,
+		"sourceMap": false
+	}
+}

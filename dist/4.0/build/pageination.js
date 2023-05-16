@@ -1,46 +1,21 @@
 /**
  
     Pageination | Simple, free, single-page websites.
-    @version 3.1.1
+    @version 4.0
     @author Ryan Comerford <https://ryncmrfrd.com>
 
 */
 
 "use strict";
 
-export default class pageination {
-  constructor(name) {
-    this.name = name;
-  }
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
-function _supportsES6() {
-	try{
-		Function("() => {};");
-		return true;
-	} catch(exception){
-		return false;
-	}
-}
-
-const ES6Support = _supportsES6();
-
-if( !ES6Support ) {
-	let errorText = "Insuffient support for ES6 (ECMAScript 2015). Please update your browser.";
-	errorText.unshift("[WARNING] Pageination.js |");
-	console.warn(errorText);
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
+/**
+ * A helper function for logging, warnings, and errors
+ * TODO move & refactor for readability
+ */
 function log(
-
     txt = [],
     type = "log",
     spaced = false
-
 ){
     if(txt.length <= 0) return false;
 
@@ -52,33 +27,31 @@ function log(
     else throw new Error(txt.join(' '));
 };
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * The main Pageination object
+ * @constructor
+ * @param {string} elementID - The ID of the main Pageination wrapper element.
+ * TODO add all other params
+ */
+function pageination(
+	elementID,
+	{
+		type = "vertical",
+		speed = 500,
+		scrollSensitivity = 25,
+		dots = {},
+		devMode = false,
 
-function pageination(elementName, {
-
-	type = "vertical",
-	speed = 500,
-	scrollSensitivity = 25,
-    dots = {},
-    devMode = false,
-    onInit = (pageination) => {},
-    onPageChange = (pageName, pageIndex) => {}
-
-} = {}){
-
-	//-------------------------------------------------------------------------------------------------------------------------------------------------
-
-	if( !ES6Support ) {
-		let errorText = "Insuffient support for ES6 (ECMAScript 2015). Please update your browser.";
-		alert(errorText); 
-		throw new Error(errorText);
+		onInit = (pageination) => {},
+		onPageChange = (pageName, pageIndex) => {}
 	}
+){
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
 
-	let element = document.querySelector(elementName);
+	let element = document.querySelector(elementID);
 
-	if( !Boolean(elementName) || elementName == '' ) 			  log(["Pageination page element required. See documentation"], "error");
+	if( !Boolean(elementID) || elementID == '' ) 			  	  log(["Pageination page element required. See documentation"], "error");
 	if( !/(?:vertical|horizontal)/.test(type) )					  log(["Invalid pageination type. Must be a string of value vertical or horizontal"], "error");
 	if( typeof speed != "number" || speed <= 0 )				  log(["Invalid speed value. Must of type number and greater than 0"], "error");
 	// validate scroll sensitivity
@@ -107,7 +80,7 @@ function pageination(elementName, {
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
 
-	const pages = 	  document.querySelectorAll(`${elementName} section`),
+	const pages = 	  document.querySelectorAll(`${elementID} section`),
 		  pageNames = Array.prototype.map.call( pages, el => el.id);
 
 	const bodyElement =     document.body;
@@ -135,17 +108,6 @@ function pageination(elementName, {
 
 	const _initaliseCSS = () => {
 
-		const cachePageNamesLength = pageNames.length;
-
-		let cssText = `.pageinationbody{position:fixed;top:0;left:0;height:100vh;width:100vw;margin:0;overscroll-behavior-x:none}.pageinationbodyvertical{margin:0;overflow-y:hidden}.pageinationbodyhorizontal{margin:0;overflow-x:hidden}.pageinationwrapper{position:fixed;top:0;left:0;height:100%;-webkit-transition:-webkit-transform var(--pageNamesLength)ms ease-in-out;transition:-webkit-transform var(--scrollSpeed)ms ease-in-out;-o-transition:transform var(--scrollSpeed)ms ease-in-out;-webkit-transition:-webkit-transform var(--scrollSpeed)ms ease-in-out;transition:transform var(--scrollSpeed)ms ease-in-out;transition:transform var(--scrollSpeed)ms ease-in-out,-webkit-transform var(--scrollSpeed)ms ease-in-out}.pageinationwrappervertical{-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0);width:100%}.pageinationwrapperhorizontal{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-flow:row nowrap;flex-flow:row nowrap;width:var(--pageNamesLengthMultiplied)}.pageinationpage{height:100%!important;width:100%;overflow:hidden;-webkit-box-flex:2;-ms-flex-positive:2;flex-grow:2}.pageinationdots{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin:15px;z-index:999}.pageinationdotsleft,.pageinationdotsright{width:15px;position:fixed;top:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.pageinationdotsright{right:0}.pageinationdotsleft{left:0}.pageinationdotsleft .pageinationdot,.pageinationdotsright .pageinationdot{margin:7.5px 0}.pageinationdotsleft .pageinationdotactive,.pageinationdotsright .pageinationdotactive{margin:5px 0!important}.pageinationdotsbottom,.pageinationdotstop{height:15px;position:fixed;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.pageinationdotstop{top:0}.pageinationdotsbottom{bottom:0}.pageinationdotsbottom .pageinationdot,.pageinationdotstop .pageinationdot{margin:0 7.5px}.pageinationdotsbottom .pageinationdotactive,.pageinationdotstop .pageinationdotactive{margin:0 5px!important}.pageinationdotactive{opacity:1!important;cursor:default!important;height:15px!important;width:15px!important}.pageinationdot{cursor:pointer;height:10px;width:10px;opacity:.5;border-radius:7.5px;-webkit-transition:opacity var(--scrollSpeed)ms,height var(--scrollSpeed)ms,width var(--scrollSpeed)ms,margin var(--scrollSpeed)ms;-o-transition:opacity var(--scrollSpeed)ms,height var(--scrollSpeed)ms,width var(--scrollSpeed)ms,margin var(--scrollSpeed)ms;transition:opacity var(--scrollSpeed)ms,height var(--scrollSpeed)ms,width var(--scrollSpeed)ms,margin var(--scrollSpeed)ms}.pageinationdot:hover{opacity:.75}.pageinationdotslight .pageinationdot{background:#fff}.pageinationdotsdark .pageinationdot{background:#000}`;
-			cssText = cssText.replaceAll("var(--pageNamesLength)"		   , cachePageNamesLength);
-			cssText = cssText.replaceAll("var(--pageNamesLengthMultiplied)", `${100 * cachePageNamesLength}%`);
-			cssText = cssText.replaceAll("var(--scrollSpeed)"			   , this.speed);
-
-		let cssElem = document.createElement("style");
-		cssElem.innerText = cssText;
-		bodyElement.append(cssElem);
-		
 		bodyElement.classList.add(`${bodyClass}`);
 		bodyElement.classList.add(`${bodyClass}${this.type}`);
 

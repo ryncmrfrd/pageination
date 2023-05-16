@@ -1,0 +1,31 @@
+/**
+ * Variables for use in main.scss
+ * Feel free to edit and recompile to pageination-3.2.0.css
+ */
+
+// Functional Variables
+
+$numPages: 3;
+$horizontalWidth: 100% * $numPages;
+$scrollSpeed: 500ms;
+
+// Colours
+
+$light: #fff;
+$dark: #000;
+
+// Navigation Dots
+
+$dotsWrapperMarginMultiplier: 1.5;
+$dotsElemMarginMultiplier: 0.5;
+
+$dotHeight: 10px;
+$dotWidth: 10px;
+$dotActiveHeight: 15px;
+$dotActiveWidth: 15px;
+
+$dotDefaultOpacity: 0.5;
+$dotHoverOpacity: 0.75;
+$dotActiveOpacity: 1;
+
+$dotBorderRadius: 7.5px;

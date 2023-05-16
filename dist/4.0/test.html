@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pageination.js</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <main id="elem">
+
+        <section id="page1" style="background: #0077cc;"></section>
+
+        <section id="page2" style="background: #ff64f2;"></section>
+
+        <section id="page3" style="background: #0077cc;"></section>
+
+	</main>
+	
+    <script src="pageination.js"></script>
+	<link rel="stylesheet" href="./build/pageination.css">
+
+	<script>
+		new pageination(
+			"#elem", 
+			{
+				dots: { 
+					type: "right", 
+					theme: "light" 
+				},
+    			onPageChange: handlePageChange
+			}
+		);
+
+		function handlePageChange(currentPageName, currentPageIndex){
+			document.title = `${currentPageName} | Pageination.js`
+		}
+	</script>
+</body>
+</html>

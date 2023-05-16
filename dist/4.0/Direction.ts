@@ -1,0 +1,4 @@
+enum Direction {
+	Vertical,
+	Horizontal
+}

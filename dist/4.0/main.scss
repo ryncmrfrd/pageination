@@ -1,0 +1,125 @@
+// Const variables, you probably shouldn't change these
+
+$SCREEN-HEIGHT: 100vh;
+$SCREEN-WIDTH: 100vw;
+$NESTED-MAXSIZE: 100%;
+$FLEX-GROWFACTOR: 2;
+$MAXZINDEX: 999;
+
+@import './_variables.scss';
+
+// Body element, parent of <main>
+
+.pageinationbody {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $SCREEN-HEIGHT;
+    width: $SCREEN-WIDTH;
+    margin: 0;
+    overscroll-behavior-x: none;
+
+	&vertical {    
+		margin: 0;
+		overflow-y: hidden;
+	}
+
+	&horizontal {
+		margin: 0;
+		overflow-x: hidden;
+	} 
+}
+
+// <main> element, parent of <section>s
+
+.pageinationwrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: $NESTED-MAXSIZE;
+    transition: transform $scrollSpeed ease-in-out;
+
+	&vertical {
+		transform: translateY(0);
+		width: $NESTED-MAXSIZE;
+	}
+
+	&horizontal {
+		display: flex;
+		transform: translateX(0);
+		flex-flow: row nowrap;
+		width: $horizontalWidth;
+	}
+}
+
+// Each page, or <section> tag
+
+.pageinationpage {
+    height: $NESTED-MAXSIZE;
+    width: $NESTED-MAXSIZE;
+    flex-grow: $FLEX-GROWFACTOR;
+    overflow: hidden;
+}
+
+// Navigation dot wrapper element
+.pageinationdots{
+	
+    display: flex;
+	position: fixed;
+	transform: translate(-50%, -50%);
+    align-items: center;
+    margin: $dotWidth * $dotsWrapperMarginMultiplier;
+    z-index: $MAXZINDEX;
+
+	&bottom,
+	&top {
+		height: $dotHeight * $dotsWrapperMarginMultiplier;
+		left: 50%;
+
+		.pageinationdot { margin: 0 $dotHeight * $dotsElemMarginMultiplier; }
+		.pageinationdotactive{ margin: 0 $dotActiveHeight * $dotsElemMarginMultiplier; }
+	}
+
+	&top { top: 0; }
+	&bottom { bottom: 0; }
+
+	&left,
+	&right {
+		width: $dotWidth * $dotsWrapperMarginMultiplier;
+		top: 50%;
+		flex-direction: column;
+
+		.pageinationdot { margin: $dotHeight * $dotsElemMarginMultiplier 0; }
+		.pageinationdotactive{ margin: $dotActiveHeight * $dotsElemMarginMultiplier 0; }
+	}
+	&left { left: 0; }
+	&right { right: 0; }
+
+	&light .pageinationdot { background: $light; }
+	&dark .pageinationdot { background: $dark; }
+}
+
+// A single navigation dot
+.pageinationdot {
+    cursor: pointer;
+    height: $dotHeight;
+    width: $dotWidth;
+    opacity: $dotDefaultOpacity;
+	border-radius: $dotBorderRadius;
+    transition: opacity $scrollSpeed, 
+				height $scrollSpeed, 
+				width $scrollSpeed, 
+				margin $scrollSpeed;
+
+	// "!important" used here to only allow :hover to activate on non-active dots
+	&active {
+		cursor: default !important;
+		opacity: $dotActiveOpacity !important;
+		height: $dotActiveHeight !important;
+		width: $dotActiveWidth !important;
+	}
+
+	&:hover{
+		opacity: $dotHoverOpacity;
+	}
+}

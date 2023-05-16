@@ -35,8 +35,3 @@ If this is the only thing that your read, take this in: all you need to start is
 
 Contributions, issues and feature requests are welcome!
 Feel free to check [issues page](https://github.com/ryncmrfrd/pageination/issues).
-
-## :wave: Say Hi!
-
-[![GitHub followers](https://img.shields.io/github/followers/ryncmrfrd?label=Follow&style=social)](https://github.com/ryncmrfrd)
-or :email: me at [ryncmrfrd@outlook.com](mailto:ryncmrfrd@outlook.com).
