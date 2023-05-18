@@ -44,7 +44,7 @@ Chrome | Edge | Safari | Firefox | Opera | IE | Chrome (Android) | Firefox (Andr
 
 ### Usage
 
-The only file required in order to use `pageination.js` is the `pageination-3.1.1.min.js` javascript file. There aren't any CDNs currently serving `pageination.js`, so it must be downloaded from [here](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.min.js). Otherwise, you can use the production, non-minified version [here](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.js), and explore the CSS (which is automatically injected by the Javascript file), [here](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.min.js).
+The only file required in order to use `pageination.js` is the `pageination-3.1.1.min.js` javascript file. There aren't any CDNs currently serving these files, so it has to be downloaded from [Github](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.min.js). Otherwise, you can use the development, non-minified version [here](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.js), and explore the CSS (which is automatically injected by the Javascript file), [here](https://github.com/ryncmrfrd/pageination/blob/master/dist/3.1.0/pageination-3.1.0.min.js).
 
 The required HTML structure consists of a `<main>` tag wrapping the entire page, with `<section>` tags for each page. An example full HTML file can be seen below.
 
@@ -101,10 +101,10 @@ Variable | Description | Type | Values | Required
 --- | --- | --- | --- | ---
 elementName | Query selector of the main tag that wrapping all pages.  | `string` |  Any string |  `true`
 scrollSpeed | ID of the HTML main tag that wraps all pages.  | `string` |  Any string |  `true`
-scrollSensitivity | How fast to scroll between pages in milliseconds. | `number` |  > 0 |  `false`
+scrollSensitivity | Speed to scroll between pages (milliseconds). | `integer` |  > 0 |  `false`
 dots | Contains *dotPosition* and *dotTheme*.  | `object` |  { type: "", theme: ""} |  `false`
-* type | Position of the dots on the screen. | `string` |  "top", "left", "bottom", "right" |  If *dots* `true`
-* theme | The colour of the dots. | `string` |  "light", "dark" |  If *dots* `true`
+type | Position of the dots on the screen. | `string` |  "top", "left", "bottom", "right" |  If *dots* `true`
+theme | The colour of the dots. | `string` |  "light", "dark" |  If *dots* `true`
 isDevMode | Enables useful developer console logs. | `boolean` |  True/False |  `false`
 
 ### Callbacks
