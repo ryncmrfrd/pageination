@@ -19,7 +19,7 @@ Over the years I've returned to the project several times to improve it with the
 	        Page2
 	    </section>
 	    <section class="Page3">
-		    Page3
+	    	Page3
 	    </section>
 	</main>
 	```
@@ -85,13 +85,13 @@ new pageination(elementName, {
 	type = "vertical",
 	speed = 500,
 	scrollSensitivity = 25,
-    dots = {
+  dots = {
 		type: "right",
 		theme: "light"
 	},
-    devMode = false,
-    onInit = (pageination) => {},
-    onPageChange = (pageName, pageIndex) => {}
+  devMode = false,
+	onInit = (pageination) => {},
+	onPageChange = (pageName, pageIndex) => {}
 });
 ```
 
