@@ -1,4 +1,0 @@
-enum Direction {
-	Vertical,
-	Horizontal
-}
